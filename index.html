@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- PWA / 桌面圖示 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="光耀運勢">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0E0C09">
+    <link rel="apple-touch-icon" href="data:image/jpeg;base64,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">
+    <link rel="icon" type="image/jpeg" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5Ojf/2wBDAQoKCg0MDRoPDxo3JR8lNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzf/wAARCAC0ALQDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAAAAECAwQFBgcI/8QARxAAAgEDAwIDBQUEBQkJAQAAAQIDAAQRBRIhMUEGUWETInGBkRQjMkJSB6GxwRUzcrLwFiQ2U2KT0dLhJSZDY3OClKLxkv/EABkBAQEBAQEBAAAAAAAAAAAAAAABAgMEBf/EACcRAAICAQMEAQUBAQAAAAAAAAABAhEDEiExE0FRcWEEIjKhsYHB/9oADAMBAAIRAxEAPwD2Os/W9Z0/QrI3mp3CwxA4UdWc+SjqTRr+sWug6VPqN82Iohwo/E7Hoo9Sa+efEet3/iDUZL7UpMkj7qNTlI0J4Vf59yetbSM2db4h/arql47R6LEthB0EjAPK38l+WfjXE32r6nqDl77ULq4Y9faTMf3ZxVRlKsVbqOvNNrRLFLN+pvrRub9TfWkxnAqQRHeFyOaAZub9R+tJub9TfWnyR7ADuB5x0pNv3XtM/m2keVAN3N+pvrRub9TfWjbld3YU4odqkHOQTj4UA3c36m+tJub9TfWgAlS3YdacibmUA8NnnyoBu5v1N9aAzfqP1pUG4Mf0rup0kW3fhslDgjHbzoBhdv1N9aTc36m+tOVcqzZ/CM9PXFMJAAxQC7mH5m+tIWY/mP1pUQuVPYtjPlSFSFUkYDDIoBUkkRtySOpHQqxBrc0rxl4h0tl+z6pM8Y/8Kc+0Q/Jv5GsGmnmhD2fwr+02z1KRLXVkWxuWOFk3fdOfifwn48etegJKG718tmI7Qcj3v4V6T+zfxbNA8ekapOWQ4W2lc8qeyE+Xl9PKhqz1/NFVI7gMoOaKgPJf2xa41/ryaTCxMFgPfUfmlYZP0BA+Zrhgcgq6qHwTtVR8qdqd299qd3euxLzzPKT8STVbvkHmqQc27glQB06YpNw/Qv76GZmxuYnHTJpKAXlmAUAHPGKsBl3DndwdoHpnmq1GcdKAkmUqq8HFEC72aMnh1P1HIqKlBK8g4PpQD9wa329w+75EU5CAImJ4UNn/AB86hoyfOgHJuRN6NhhwR6VLAylg2wA5IOOh4NQetGSDnJzQD4yNkgAwPZn+VLKxS5ZsZwxyPMeVRDPY4zSkk9ST35oCQqAsmw5XaCPhmoCfIYFOBI6E0h9aEJIyUALKozgLleTz1psudzgJhVP6cYFNJzyST8aC7ldpdivlnihRNw/Sp+tISCPwgfDNITSUBPwIxvbkYyM4PPb+FOmLkMy5Uq3BGcjFVaXvk9TQHunhDW21fQba6ZgZgNk3P514P16/OivHNM1680uBoLZiEZ95Ge+AP5UVKLZWZAoQrkhlBBoZQozzg9PhTk962I/QQR86JcFUI/Tg+hFUg72P3uzccbsE+VRKM96tKwExJPDsu2q0YBfa5wM4J8qAUph2TkMPMdaJF2hSDncu6npI2RHINwzjnqvwNEpCBMAE7OD5cmgAxKvVjgMAePMZqN0KMyt28u9Ty/m/tL/dqMH2kWD+JBx6igEdFRyuT06/KrFtYNNF9omljtrXOPbS5wT5KByx9B88VJDFEGlurtSbeLA2g4MrkcID+8nsPlTJYb3U7W41NynsLYqhUMFCA9FVfKsSl2NJEwu9CteFsbq/cfmnm9ih+Crk/U1NFrujZxP4VtWTuYruVW+pJrDAGM1ueJbTU7a00ltQ02C0iEHs4niAzJ39/wAmx29TWJRipJN8/JpSdNr+GhbWHhbXfu9MvrjSb4/gt78h4nPkHH8/pWDqumXmk3Rtr+Exv2Ycq48we9QWVjJqN5DZwBTLO4RA5AGT5mtyzvXDS+HNeYSojmOKYtuMLjgAN5eX06VG5Y+Ha/YVS7UYGz7veD3wR5U0rxu7Dr8asTW8lpdzWc/4hkZHfuCKgzmHHcNnHpiuyaatHNquRCnuqVJJYE4PpTQuVLDPAyRUitgRP2QNn/Hzpi5VN6sQ6kdPKqBEQOyjPDfupqLu3ckYUt9KsQkSurMAG3YyBjdwaijb3XAAA9m3TvxQCtFguFJJUA4x1GOajVQ+eTwpP0qSZik25eCCMfQUoVRuZPwtGxA8unFARBUI95mB+FFJnPRT8qKEJlJ24zxRk0KOB8KdtPPooIxznJoUbQck8kn405lKsQeoptAGT50E56mjqR/OnrHlgCwHHlmgG5P6j9aTOBnsKkeLYoOc5OOlEKhpUU/mYD99GC7qcM7vBp9vHI/2SD2kwUZ95gGYn4DaPlVbSYrabU7SO9z9leZRJzjIzVjXJ7i38R6p9nmeItIyEqcZXyro7DRND8Q6Qi6cy219HGAwySd2Ody9wfMf9K8ssuiCcuH38HaMNUqXKKPjLQItCvbW4tVIsp2wUJzscHJGfIjn5Guo/a7Io8O2IAyXvAVx5bGrNkkn1jw3qHh7VkMes2UXtYdx/rggyGU9+Mg+ec+dW5ry18TX/hGBpEMENu2oXZLcIEUDDeXvA9a8WqblBz303/u1o9VRSko96Kut+E9N0H9n7X18G/pZ/ZlX3kbXYj3AOnAzn4VwFvBJOxWFHkcgthRk4869LubK6/aTq/2lnkt/DNizCJ+jXLfmZc/TPYepNcj4rn0qw1GO28OMI3iDLLLA5IOfy57nzNevBkl+L3k/0efLBcrgqaxMbvT7K/z96v3UhHc/4/jWWDnFXkGfDlwGP4Zcj/61nIfdFdcG2qPhnPJ2Y8k+ZptSRxlyozgE4z5U0jaFJ7jIrucxMkc5OaTPlxRRQgpJPUk0mSO5p4jOFJIwT/j+NDw4UsGyAPKhSPew6MR8DRTcUUBaXOFAGT5VOMhWQqu8qSVCjjyFQLwBjg0dOlAKVcAFlwOg4xRn/ZX99IzM34mJx0yc0maAUElgFAznjFT8M6kHdwcDPl3quKUHHQ0BLKTtHp1+NFp715bjzlT+8Khqzp2DqNoP/OT+8KkuGVck/iMAeKNRDEhfb8kdccVuQ2HhH3JotdmtJ15WQS4ZT8NvFYfinjxRqP8A6gP/ANRVWw02fU7pba0RXmYEqpYLnHlmvO4ascXqrY66tM2qs6LUb2y1PU9Ms73Xre7tY5GL36wtDNGmOULDg7vMVe8R2ngVtDuTo15awX0ceY1hlfM+OqMD1z/GuGMWx2RlKspIII5BHUUwxr5VF9Nw1J7F6/Nrk9Fj1DSdb0mG21jxgllaiMKNNsYDbxoMfhLMCWx9K5HxBaeHbFUXQ7x7iTdg+9uG344GKz7axlvGkW3j3GKJpX5ACooySSarBF61uOHS9mYlktbo0x/o5cHzk/5azYh7grSH+jtwPKX/AJazo/wCpg/KfsmTheidCV2lgF5AHujJ9ajkD5OUwAeu3GKaST15pS7FdpYkeRNegwNzj8oP1pGPoB8KDRQhPuPswjt0IyM+fb+FLOCAygHqc4z0qsaQ9cnrQotFNzRQFwrjbt5DKCM0jDaAeeeQPSnKc239gjHzomO5UI/SFPoRQDvY/e7QeA201EozVlWAnJz+NlxUCAbsPkDoT5UAFdrshyGHn3oZdoQj8y5pyOwYRuNy5xg9vgaJG2bMYJ2dfmaAVo1UEknAIB+man0tMatZqf8AXpyPiKil5Df2l/u0Ws3spYZfzQuHHqAckVmW6ZVsy14qx/lTqHX8Y/uis+KWWCVJoJGjljYMjqeQR3rV8Yxez8SzuBlbiNJUPmCMfyqnpVidRuTGZBFDGhkmlIzsQdT8ewrnjaWJN8Ubmn1HRavr+w1lvbXKPZ6k39ZJFHvinP6io5U+oyKpm0ij964vY44/1CKQk/AFR/EVHdagXJisVNtbA4CqfeYebN1J/dTLa+vbV98F1Kp7gtuU/EHg/OrGLiqRHJN7lm61KFLFtP0qKSOGUg3E0pHtJ8cgHHCoDztGeeSTWeowK6drCz1/Q7nU9NgS21KxAa8tIhhJY/8AWIO3qOlcyCCK1BpklZfUj/J+6Hf2n/Cs+NfusnoP41oSAR+H+es83HwH/wCVRjINvjuGzj5Vzw8yfyWfC9DtnuqR1IJx8KYF3AkZ90ZIqVGAEbnoobP+PnUQyF3KxDLjp5V3MBGgdkGeGOD6U2Mb93opap4ZNzqxUbt3UDG7g1HC3uyAAAezbgfCgFaHBdQfeUAgeYxk1Giht2c8KT9KfOxWfcvBBGD8hTsKN7J+Fo2OPLpxQEShCPeLA+mKKaAx/Cp+QooCwpOPSlHHekXoKmCBkfG0HAH4s896EISaDk9aVsbvdAA7AHNGxvL99CiE4GKQnPU0EEEZHfvUwUCRQACcc45wPOgIsnzP1ppNSz42gAd85x2qKgNqUnV9BjkBze6Yu117vAfzeu09adpi/wDdLXpY/wCs+5Ukfo3ZNY9rczWlylxauUlQ5B6/EEdwfKtNbky291HopSB7xNlzYOAQfWInqPTqO2a884NKlxd/s6xkm7fJiRjin0m1omMcgKuOCrDBHyoNeg4nQ+ALhoPFlkgP3dzut5V7MrKeP3CsVLR5NUlsLUbiJ2jT4BiM/QVPo8WoNdJc6XlJLc7/ALQSAkXqzN7o+dE95b6fby22mym4up8i5vsEAg9VjB5x5seT6CuTtSbR0VaaZFrs8b3UdpaNut7VfZqw/Me5+tVBwBTI0xyafmtwjpVIzJ2xcnzptTRqMqfdzzn3s544qNwABjHHB97OTWjI3OOc803J7HFO2Me376RlYDkYoUbknqTRkg8GpiiezQrgnPAGTmlfAR8qM9AQO/FAQBm/UfrRRkUUBaXHG44HnThIAdoBCYI9ee9RjoKXpxQDnCADYxY98jGKYaDmgChAGARkcd8VKJRuBYY65x38qveH9M/pbURbszJEFLyOvYduvriku9EvY7qVLa0upYVbCSNGAWHnjNc3lhq0t7m9Eq1FB3VgOCMVH1rVtfD2qXM6RfZHiDnHtJfdVfUmqN7azWN1JbXKbJYzyAQR8QR1FaU4t0mRxklbRBTWUNxiteHw/fz6ZFqMQgNvIxTLTqhUg453EVH/AEHfdvsv/wA2H/mqdSHkaJeCiLy5VQjSmVB0WVQ4H/8AWcUq3sqnKw2oPn9nU/xFaWo+G9R07SYNTuFhNtMxUGOZXKnPGcHBzg9M+tV9D01dYv1sVuo7eeUEQGUHa79lJHTPY81FKDWpcFaldMpXV3d3YVbm4kkRfwoT7q/Beg+lQhQK6K18JXxXVZNSxYQ6av300qllD8YX3ck5BzkZ7edRp4dWWxlv4tUt3s4W2yTrbz7EPHBOz1H1oskOzGmRhGkrevfD9vbeHk1ZNYtZt8xjSIKyGQDg7dwBJB9MetZunWaXcqh7u0gHtFUrNLsZgT+UYOa0skWrJpd0Vw6oV25IBBJPemuI8Eq7MewK4rpfEfhm2067v4rLUI5Daor/AGeQlpmB6khVwuMjr1qE+Gpv8n4rtbe8N/Jc+y9gUwAvZiCMgevSufXhSd8munK6OcxikqW4glt5nhuI2jlQ4ZGGCDUddrvcwP3gEYGAMYyeg70Syq+RhupNRmigEoo+RooC63vRpIeuNrfEf9KSUY2+qhifMmkVvumXnkgj5UM2VAPYYB9KAsjm5bP5XGPnVUZwceXTzp/tvfDAdwW9cUwMFPu5+dAdV4We0u5m0pELxTRPJeSnKluMBF7gDPXv8Kz9H0zTtY9tFZWRNzHllge8ZTIg7qduM+lX/C1xItpq16IYB9ntsJ7OBQxYgnBIGT0HFQ6A5v4pIXSGwvkQvHO1igjbjlT7oIPz5r58m1KbXwetU4xF02z0e98P61dHTpIpLRFZSbkswbB6cAD14Oa5hUKckFTyGUjBU9xXb+HZr5vCWqyw2UQu2ljjhjS0Vdze71XGDye9ctq95qNzqE51hAt2BskHsghyOhOOp9fKuuCTc5L/AL8I55UtMWdNfxSz/szgSGJ5X+2g7UQscZPYVyC6Zd4H+Y3P+4b/AIV1l3cSw/syt5LeWSJje43I5U43N3Fcot9qGB/n13/v3/41fp9X3V5Yy19t+Edb4nieD9mPh5JEZHW5bKspBH9Z2NcxpOn6leyrLpVtPNJC6nfEudjZypJ7cj91dP4nkkl/Zj4eaWR5HNycs7Ek/wBZ3NcnpfGo2WTx9oj/AL4pgvRL2/6TLWpekdvpVt4h1Hxpd6X4guWhlu7cySqYY5YpNgGxghG0jjqOa17WKUeCNSjNlcB/taYjOiRKzfh5EOcMP9o9PlVfVb4aN+1PUdTle1KR26xrFPdrCW3RjBG7txzUVnDA3gDVvutICPexsVXUZGhz7v4pN2VPoDXnbbSfo6qk2vZh/tFhmtrPQYpbhnVrYyJC9nHC0I4yPd6DJ/D2I6mk8Jao1nYyJHfxNOfu4ba5lSKKEseZPe/G3kB8zSeLrm31TTNNnS90uKTT4fs4s4LszO68e8GxzyOnXHOap+Htai0/TpLdl0uOX2u9J7uyaZgCOg2jsR3867KLeGqObaWSzqdbv20S2ntLjUJLq6s4WUut6sctwHB95o8EnbkYyfUVXNulvpOjrG/sXtLqG6u7aSYu6CQ4Az8T0NLod7LfC/1bWNZW9srWPJ9nA0KK/XJGBuwO3PUelclZ6Zb6xq4T+mhLLcSl2IilL8ZPVgMnjqa4KCpp7VydnLuu47xFbT2+v3U0+Qst1II89SABz8Pex8jWTGvuuSefZtgCtHxHqd3dX62l7JDM1i7R+2iQqZPPOe/H1zWXGQitnupH1r3Yb6as8uStTomlYGVkc4VsDPkcDBqNAymRCMEIwx9KbPIJGJUHt1+FKJRt94e9sK58/KupgYrOo4Yj50UKUx7xbPoKKELGCPdPUcVJ7PqMMTtGMgjBzWr4u006X4p1GyxtVZy0ZPA2N7yn6GswMoBQMDkH3j50KRSLsYjnHYkYzTc09l2Y99Sf9k5pN7Afib60BYg1O/tLSa1tLhoopyC4Tg58weoqSG+vopEaS7vJU7p9rdM/MGqWdzAMxx3J5qaOVUkBUY69R0HNYcI+CqT8m9r3iSAaPDp2iT34Yye0lnnlbf8A2Q2cnn5cVzLSTTOZLiV5XIwWdix+pp8mxgCrDPlzUdTHijjWxqc3N7nQHxHbweEYNJW1We5WcyMJ4g0YGSfPk81mLq7DH/Zmlf8Axf8ArVEgZopHFGN/IeSTN/X/ABJBqfhfS9JitTFPbSmSUogSIfiwFGSfzVF4Y1qz0T7XcXGnRXV37IGyeQbhFJnqR0xjnPXj1rEwCaDUWKKi4rgjySbs6DT/ABPBNH7HxXpg1iMMzJP7QpcR7jkgP3XJJwelayeIfBC6ZLpqWOvxWc0glkgWdSrMMYJOc9hXE4FNKjyo8MWVZGb+sXnhA2LrommX63bEBXupiVQdzgNyfLtWbYDS9gk1Oa6bB/qLaMAn4uxwPkDVAjmlAyQMgZ7npWlClVkcrd0a+ra3Nf2iadZ2q2WlxYK20eTubPV26savaNq2g6Ohvls7ldRVWVItxaMg9wT0z8659WRW2BgRg+8emSP4VG8YUAl1YnspzWJYYuOkqyNOyP2jzTSTSnLyOXY+pOTTickAefalDMOjEfOk5Y4ZjjzPOK7LYw2TCJdygDJxjB45pJVRU938WfOlSRQ6lPdPI57DtSSMroMEZHXrzUBCSBRXYeFfC0eq6Wbu4O3dKwTPdRgfxzRVFHcftg8Ovd20etWkZaW2XZcADlo+zf8AtOfkfSvIM19UXMQdSCAQRgg968V8c+AZrCaS/wBEhMloSWe2Xlov7I7r6dRUTDOB6UhNFJVIKKQ0UdKASkJpSaSgCik70tAGaSiigCkNBNFANJpKU9aKFDpRRRQgUUUtAJVrTLCbUr6K0tx78h69lHcn0FGnafdalciCyhaR+/ko8yewr1Pwp4bi0iHA+9uZMe0lx19B5ChUjU06xjtLKG2gXEcSBV+AoreSwZFAK5ooaOmbmqN2ikHiiioQ4zX/AAno+qO8s9qI5yMmaE7GPx7H5ivINfso9OvHhhZ2UHALkE/uAooogzM9ofIU0yH0ooqkDefIUbz6UUUAm8+lHtD6UUUAbz5Ck9ofIUUUIJvPpRvPpRRQoFz6Ubj6UUVAG8+Qo3n0ooqgAxJ7V2vhXwzp+oxe2uzM+OdgfCn6DP76KKBcne6dY2tpCsVrAkMY/Kgx/wDtdBpyKjKQBRRUNG6MAYAooooD/9k=">
+    <title>光耀 每日運勢播報站</title>
+    <meta property="og:title" content="光耀 每日運勢播報站">
+    <meta property="og:description" content="每天 1 分鐘，看懂今日運勢、穿衣吉色，免費八字排盤">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://diend1129.github.io/daily/">
+    <meta name="description" content="光耀每日運勢播報站，免費八字排盤與每日運勢查詢">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #F7F6F5; color: #333333; }
+        .font-serif { font-family: 'Noto Serif TC', serif; }
+        .color-wood  { color: #6B7A6A; }
+        .color-fire  { color: #A65B54; }
+        .color-earth { color: #B0A18E; }
+        .color-metal { color: #C5B276; }
+        .color-water { color: #5B6E80; }
+        .border-thin { border: 0.5px solid #E0DCD3; border-radius: 10px; }
+        select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; border-radius: 8px; }
+        input[type="text"] { border-radius: 8px; }
+        .pillar-card { border: 0.5px solid #E0DCD3; border-radius: 10px; }
+        .btn-calc { background-color: #333; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+        .day-master-box { border: 2px solid #C9A24A; border-radius: 12px; }
+        .history-chip { border: 0.5px solid #E0DCD3; border-radius: 999px; cursor: pointer; transition: background 0.15s; }
+        .history-chip:hover { background-color: #F0EEEA; }
+        .history-chip-active { border-color: #C9A24A; background-color: #FBF6E9; }
+        .swatch { width: 16px; height: 16px; border-radius: 50%; display: inline-block; vertical-align: middle; border: 0.5px solid #ddd; flex-shrink: 0; }
+        .tag-ma  { background:#EEF1ED; color:#6B7A6A; }
+        .tag-hua { background:#F9EEF0; color:#A65B54; }
+        .tag-ku  { background:#F4F1EB; color:#B0A18E; }
+    </style>
+</head>
+<body class="py-6 px-4 pb-10">
+<div class="w-full max-w-md mx-auto">
+
+    <header class="text-center mb-6">
+        <div class="text-[9px] tracking-widest text-gray-400 uppercase mb-0.5">Guang Yao BaZi</div>
+        <h1 class="text-xl font-bold tracking-widest font-serif">光耀 每日運勢播報站</h1>
+        <p class="text-[11px] text-gray-400 mt-0.5">流日天機 · 知命善用</p>
+    </header>
+
+    <section class="bg-white border-thin rounded-sm p-4 mb-4 text-center">
+        <div class="text-[11px] text-gray-400 tracking-wider mb-1" id="currentDateText">公曆載入中…</div>
+        <div class="text-xs font-medium mb-2" id="lunarDateText">舊曆載入中…</div>
+        <hr class="border-t-[0.5px] border-[#E0DCD3] my-2 w-8 mx-auto">
+        <div class="text-[10px] text-gray-400 mb-0.5">今日流日</div>
+        <div class="text-2xl font-bold font-serif my-1" id="flowDayPillar">--</div>
+        <div class="text-[11px] text-gray-500 font-serif mt-1" id="jieQiText">節氣載入中…</div>
+    </section>
+
+    <section class="bg-white border-thin rounded-sm p-4 mb-4">
+        <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3">今日穿衣吉色</div>
+        <div id="colorAdvice" class="text-[11px] text-gray-600 leading-relaxed">載入中…</div>
+    </section>
+
+    <section class="bg-white border-thin rounded-sm p-4 mb-4">
+        <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3 flex justify-between items-center">
+            <span>八字排盤</span>
+            <span class="text-[10px] font-sans text-gray-400 font-normal">輸入出生資料</span>
+        </div>
+        <div class="mb-2">
+            <label class="text-[10px] text-gray-400 block mb-1">姓名 / 稱呼（選填）</label>
+            <input id="birthName" type="text" placeholder="例：小明" maxlength="10"
+                class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-2 mb-2">
+            <div>
+                <label class="text-[10px] text-gray-400 block mb-1">出生年</label>
+                <select id="birthYear" class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none pr-6"></select>
+            </div>
+            <div>
+                <label class="text-[10px] text-gray-400 block mb-1">出生月</label>
+                <select id="birthMonth" class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none pr-6"></select>
+            </div>
+            <div>
+                <label class="text-[10px] text-gray-400 block mb-1">出生日</label>
+                <select id="birthDay" class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none pr-6"></select>
+            </div>
+            <div>
+                <label class="text-[10px] text-gray-400 block mb-1">出生時辰</label>
+                <select id="birthHour" class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none pr-6">
+                    <option value="23">子時 23–01時</option>
+                    <option value="1">丑時 01–03時</option>
+                    <option value="3">寅時 03–05時</option>
+                    <option value="5">卯時 05–07時</option>
+                    <option value="7">辰時 07–09時</option>
+                    <option value="9">巳時 09–11時</option>
+                    <option value="11">午時 11–13時</option>
+                    <option value="13">未時 13–15時</option>
+                    <option value="15">申時 15–17時</option>
+                    <option value="17">酉時 17–19時</option>
+                    <option value="19">戌時 19–21時</option>
+                    <option value="21">亥時 21–23時</option>
+                </select>
+            </div>
+        </div>
+        <button onclick="calcBaZi()" class="btn-calc w-full py-2 text-xs tracking-widest font-serif mt-1">排 盤</button>
+
+        <!-- 歷史命盤 -->
+        <div id="historySection" class="mt-3 hidden">
+            <div class="text-[10px] text-gray-400 mb-1.5">歷史命盤（最多 2 筆，點選名字切換）</div>
+            <div id="historyChips" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div id="baziResult" class="mt-4 hidden">
+            <div class="flex flex-row-reverse gap-1.5 mb-3" id="pillarsGrid"></div>
+            <div class="day-master-box p-3 text-center bg-[#FAFAF9]" id="dayMasterBox"></div>
+        </div>
+    </section>
+
+    <section class="bg-white border-thin rounded-sm p-4 mb-4 hidden" id="fortuneSection">
+        <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3 flex justify-between items-center">
+            <span>今日運勢解析</span>
+            <span class="text-[10px] font-sans text-gray-400 font-normal" id="fortuneSectionLabel"></span>
+        </div>
+        <div id="fortuneDetail"></div>
+    </section>
+
+    <div class="text-center mt-6 mb-2 px-2">
+        <p class="text-[10px] text-gray-400 leading-relaxed font-light">
+            本網站內容依傳統命理推算，僅供參考與娛樂用途。<br>
+            命運掌握在自己手中，請勿過度迷信，遇重大決策宜多方考量。
+        </p>
+    </div>
+
+</div>
+<script>
+var PILLAR_LABELS = ['年柱','月柱','日柱','時柱'];
+var STEM_DATA = {
+    '甲':{wuxing:'木',yang:true},'乙':{wuxing:'木',yang:false},
+    '丙':{wuxing:'火',yang:true},'丁':{wuxing:'火',yang:false},
+    '戊':{wuxing:'土',yang:true},'己':{wuxing:'土',yang:false},
+    '庚':{wuxing:'金',yang:true},'辛':{wuxing:'金',yang:false},
+    '壬':{wuxing:'水',yang:true},'癸':{wuxing:'水',yang:false}
+};
+var RELATIONS = {
+    '木':{'木':'比劫','火':'食傷','土':'財星','金':'官殺','水':'印星'},
+    '火':{'木':'印星','火':'比劫','土':'食傷','金':'財星','水':'官殺'},
+    '土':{'木':'官殺','火':'印星','土':'比劫','金':'食傷','水':'財星'},
+    '金':{'木':'財星','火':'官殺','土':'印星','金':'比劫','水':'食傷'},
+    '水':{'木':'食傷','火':'財星','土':'官殺','金':'印星','水':'比劫'}
+};
+var WUXING_BG = {'木':'#EEF1ED','火':'#F5EDEC','土':'#F4F1EB','金':'#F5F2E8','水':'#EBF0F4'};
+var COLOR_MAP = {
+    '木':{good:[{name:'綠色',hex:'#6B7A6A'},{name:'青色',hex:'#7BA7A0'},{name:'藍綠',hex:'#5B8C8A'}],avoid:[{name:'白色',hex:'#E8E4DC'},{name:'金色',hex:'#C5B276'}],desc:'今天適合穿綠色、青色系，會讓你感覺更有精神、更有活力！'},
+    '火':{good:[{name:'紅色',hex:'#A65B54'},{name:'橘色',hex:'#C97B4A'},{name:'紫色',hex:'#8B6B8A'}],avoid:[{name:'黑色',hex:'#444444'},{name:'深藍',hex:'#3A4E6B'}],desc:'今天適合穿紅色、橘色系，看起來會更有熱情、更有自信！'},
+    '土':{good:[{name:'黃色',hex:'#C9B96A'},{name:'米色',hex:'#B0A18E'},{name:'棕色',hex:'#8B7355'}],avoid:[{name:'綠色',hex:'#6B7A6A'},{name:'青色',hex:'#7BA7A0'}],desc:'今天適合穿黃色、米色系，會讓你感覺更穩定、更有安全感。'},
+    '金':{good:[{name:'白色',hex:'#E8E4DC'},{name:'金色',hex:'#C5B276'},{name:'銀灰',hex:'#B0B0B0'}],avoid:[{name:'紅色',hex:'#A65B54'},{name:'橘色',hex:'#C97B4A'}],desc:'今天適合穿白色、金色系，能幫你想事情更清楚、說話更有條理。'},
+    '水':{good:[{name:'黑色',hex:'#333333'},{name:'深藍',hex:'#3A4E6B'},{name:'灰色',hex:'#888888'}],avoid:[{name:'黃色',hex:'#C9B96A'},{name:'棕色',hex:'#8B7355'}],desc:'今天適合穿黑色、深藍色系，能讓你心情比較平靜，適合好好思考。'}
+};
+var BRANCH_TYPE = {
+    '寅':'馬','申':'馬','巳':'馬','亥':'馬',
+    '子':'花','午':'花','卯':'花','酉':'花',
+    '辰':'庫','戌':'庫','丑':'庫','未':'庫'
+};
+var BRANCH_TYPE_CLASS = {'馬':'tag-ma','花':'tag-hua','庫':'tag-ku'};
+
+// ── 馬花庫提醒文案庫（每類 8 組，隨機抽取）──
+var MHK_POOL = {
+'馬':[
+  '今天是「奔跑日」！很適合出門走走、去新的地方，坐著不動反而會覺得無聊。',
+  '今天容易想到處跑、到處玩，如果可以的話，安排一些外出的活動會很開心。',
+  '今天消息傳得特別快，適合主動找朋友聊聊、聯絡一下久沒見的人。',
+  '今天的你比較靜不下來，計畫可能會臨時改變，學著彈性一點會更輕鬆。',
+  '今天很適合去戶外、去玩，動一動會比一直坐著心情更好。',
+  '今天出門辦事情比較順利，如果有約會或要去的地方，今天去剛剛好。',
+  '今天腦筋轉得快，動來動去反而比坐著想事情更容易有靈感。',
+  '今天的能量很適合用在「動」上面，跑步、運動、出去玩都不錯。'
+],
+'花':[
+  '今天人緣特別好！跟同學、朋友聊天會特別開心，大家也會喜歡你。',
+  '今天你看起來特別有魅力，講話、表現自己都容易讓人留下好印象。',
+  '今天適合跟朋友一起玩、參加活動，會讓你交到更多朋友。',
+  '今天大家會比較喜歡跟你互動，記得也要對人有禮貌、保持分寸。',
+  '今天容易遇到欣賞你的人，多展現自己的優點，會有不錯的收穫。',
+  '今天你的創意和想法容易被大家注意到，是表現自己的好時機。',
+  '今天適合打扮整理一下自己，會讓今天的好印象更加分。',
+  '今天人氣很旺，跟人相處會特別順利愉快。'
+],
+'庫':[
+  '今天適合存錢、收拾東西，把重要的東西整理好，會讓你更安心。',
+  '今天不要太衝動做決定，靜下來想清楚，比急著行動更好。',
+  '今天適合處理一些需要耐心的事，像整理房間、寫作業這類的事。',
+  '今天比較適合「守住」而不是「衝出去」，慢慢來會比較順。',
+  '今天適合規劃未來、存零用錢，會讓你之後更有安全感。',
+  '今天可能會想起以前的事情，剛好可以把沒做完的事情完成。',
+  '今天容易覺得有點累，多休息一下，精神會比較好。',
+  '今天做決定前要多想一下，謹慎一點會比較安心。'
+]
+};
+function getRandomMhk(type) {
+    var pool = MHK_POOL[type];
+    if (!pool) return '';
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+// ── 十神文案庫（每個十神 10 組，隨機抽取，簡單好懂的說法）──
+var FORTUNE_POOL = {
+'比肩':[
+  {luck:'平',desc:'今天容易跟同學朋友想法一樣，適合一起做事，但也要記得聽聽別人的意見。',yi:'跟朋友一起做事、互相幫忙',ji:'自己一個人硬幹、把錢借給別人'},
+  {luck:'中吉',desc:'今天你的意志力很強，很適合自己一個人把拖了很久的事情做完。',yi:'自己努力完成計畫、勇敢做決定',ji:'盲目跟著別人做、太依賴別人'},
+  {luck:'平',desc:'今天容易跟朋友聊天聊很久，心情會不錯，但要記得多聽別人說話。',yi:'跟老朋友聊天、輕鬆社交',ji:'堅持自己一定對、跟人吵架'},
+  {luck:'平',desc:'今天生活比較平靜，適合照表操課，不要心急做奇怪的投資或決定。',yi:'按計畫做事、早睡早起',ji:'跟風亂花錢、相信來路不明的消息'},
+  {luck:'中吉',desc:'今天容易遇到跟你想法很合的朋友，一起做事會特別順利。',yi:'找朋友一起合作、分工幫忙',ji:'搶功勞、跟朋友鬧分裂'},
+  {luck:'平',desc:'今天比較想一個人靜一靜，想清楚事情，跟人說話要記得多包容。',yi:'自己靜下來想想、聽別人說話',ji:'跟人爭輸贏、硬要別人聽你的'},
+  {luck:'中吉',desc:'今天人際運氣不錯，多參加活動會讓你認識新朋友。',yi:'參加活動交朋友、主動打招呼',ji:'躲在家裡不出門、拒絕邀約'},
+  {luck:'平',desc:'今天平平淡淡就是福氣，按時睡覺、不要跟人爭吵比較好。',yi:'維持平常作息、跟大家好好相處',ji:'跟人吵架、亂發脾氣'},
+  {luck:'中吉',desc:'今天信心十足，很適合說出自己想要的東西，成功機會不小。',yi:'說出自己的想法、勇敢爭取',ji:'什麼都不敢說、放棄表達自己'},
+  {luck:'平',desc:'今天容易跟人意見不合，學會聽聽不同的想法會更好。',yi:'聽聽不同意見、保持開放心態',ji:'堅持自己一定對、跟人爭辯'}
+],
+'劫財':[
+  {luck:'平',desc:'今天比較想花錢買東西，出門前先想清楚要買什麼會比較好。',yi:'先想好要買的東西、理性花錢',ji:'看到喜歡的就買、把錢借給別人'},
+  {luck:'小凶',desc:'今天競爭的感覺比較強，要小心跟人吵嘴，先把自己的事做好就好。',yi:'低調做自己的事、努力變更強',ji:'跟人吵架、亂發脾氣'},
+  {luck:'平',desc:'今天比較多應酬聚餐，雖然會花一點錢，但能交到朋友。',yi:'跟朋友聚會、多交朋友',ji:'花太多錢、亂相信投資的話'},
+  {luck:'平',desc:'今天心情起伏比較大，做重要決定前要多想一想，不要急著做。',yi:'多想一想再做決定、放慢腳步',ji:'太急著做決定、太衝動'},
+  {luck:'小凶',desc:'今天可能會有意外的小花費，記得想清楚要不要花錢。',yi:'記帳、減少不必要的花費',ji:'亂買東西、把錢借給別人'},
+  {luck:'平',desc:'今天容易把心思都放在別人身上，記得也要留時間給自己。',yi:'自己靜一靜、好好照顧自己',ji:'一直比較別人、想太多讓自己累'},
+  {luck:'中吉',desc:'今天競爭反而是動力！適合跟人比賽或挑戰自己，表現出你的決心。',yi:'參加比賽、挑戰自己',ji:'輕易放棄、覺得自己不夠好'},
+  {luck:'平',desc:'今天花錢理財要小心一點，聽到小道消息先不要相信。',yi:'存錢、不亂花',ji:'相信小道消息、亂投資'},
+  {luck:'小凶',desc:'今天情緒比較容易被影響，心煩的時候先不要跟家人朋友吵架。',yi:'先冷靜下來、找信任的人說說話',ji:'跟家人吵架、亂發脾氣'},
+  {luck:'平',desc:'今天適合做一些運動，流流汗，把多的精力用掉會比較舒服。',yi:'去運動、做喜歡的活動',ji:'一直坐著不動、亂吃東西發洩情緒'}
+],
+'食神':[
+  {luck:'中吉',desc:'今天你的點子特別多，很適合想新的點子，別人也會喜歡你的想法。',yi:'發揮創意、跟人分享想法',ji:'太愛批評自己、不敢說出想法'},
+  {luck:'大吉',desc:'今天運氣很好，可能會吃到好吃的東西，或收到別人送的小禮物！',yi:'吃好吃的、開心收下別人的好意',ji:'刻意節食不吃東西、拒絕別人的好意'},
+  {luck:'中吉',desc:'今天生活步調比較悠閒，適合放慢腳步，看書或聽音樂放鬆一下。',yi:'看書放鬆、聽喜歡的音樂',ji:'一直催自己快一點、給自己太大壓力'},
+  {luck:'中吉',desc:'今天人緣很好，跟人相處很順，也很適合跟之前吵架的人和好。',yi:'跟朋友和好、好好溝通',ji:'計較以前的事、對人太挑剔'},
+  {luck:'大吉',desc:'今天財運很不錯，很適合存零用錢，也可以想想長期要怎麼存錢。',yi:'存零用錢、想想理財計畫',ji:'亂花錢、浪費機會'},
+  {luck:'中吉',desc:'今天你的才華容易被看見，做作業或表演都能輕鬆表現得很好。',yi:'勇敢表現自己的才華',ji:'太謙虛、不敢表現自己'},
+  {luck:'中吉',desc:'今天身心都很舒服，適合去戶外走走，好好對自己好一點。',yi:'去戶外走走、好好放鬆自己',ji:'一直忙不停、忽略自己的感受'},
+  {luck:'大吉',desc:'今天可能會有好機會悄悄出現，跟人聊天的時候要多注意。',yi:'多跟人聊天、把握機會',ji:'不理人、拒絕跟人交流'},
+  {luck:'中吉',desc:'今天表達能力特別好，上台說話或跟朋友聊天都會很順利。',yi:'上台分享、跟人輕鬆聊天',ji:'躲起來不說話、講話含糊不清'},
+  {luck:'平',desc:'今天容易想一直玩、放鬆，記得管理好時間，別忘了該做的事。',yi:'適度休息玩樂、安排好時間',ji:'一直貪玩、忘記重要的事'}
+],
+'傷官':[
+  {luck:'中吉',desc:'今天腦筋動得很快，點子特別多，很適合解決一直卡住的難題。',yi:'發揮創意想辦法、突破困難',ji:'墨守成規不變、壓抑自己的想法'},
+  {luck:'小凶',desc:'今天說話比較直，容易不小心傷到人，講話前先想一下會更好。',yi:'說話前先想一想、好好溝通',ji:'隨便亂講話、當面批評別人'},
+  {luck:'平',desc:'今天創作的靈感很多，但情緒也比較起伏，把精力放在作品上會更好。',yi:'專心做自己的作品',ji:'跟人吵架、亂發脾氣'},
+  {luck:'小凶',desc:'今天比較容易對現況不滿，跟老師長輩溝通時，態度要溫和一點。',yi:'好好溝通、控制好情緒',ji:'頂撞長輩、衝動亂說話'},
+  {luck:'中吉',desc:'今天你特別有個人魅力，很適合表現自己、上台或展現特色。',yi:'勇敢展現自己',ji:'壓抑自己、模仿別人'},
+  {luck:'平',desc:'今天想法很多很天馬行空，但做事要踏實一點，別半途放棄。',yi:'把想法一步步做完',ji:'光說不做、半途而廢'},
+  {luck:'小凶',desc:'今天容易看什麼都不順眼，多看別人的優點，心情會比較好。',yi:'看別人的優點、保持心情平靜',ji:'一直挑別人毛病、放大缺點'},
+  {luck:'中吉',desc:'今天學習能力特別好，學新東西或研究喜歡的事物都進步很快。',yi:'學習新東西、深入研究興趣',ji:'原地踏步不學習、覺得自己已經夠了'},
+  {luck:'平',desc:'今天適合動動腦想些新點子，但走路或騎車要特別注意安全。',yi:'想新點子、注意安全',ji:'邊走邊分心、不注意安全'},
+  {luck:'小凶',desc:'今天比較考驗耐心，面對麻煩的事情不要心煩，耐住性子就會過去。',yi:'耐心處理麻煩事、深呼吸',ji:'心急亂發脾氣、半途放棄'}
+],
+'偏財':[
+  {luck:'大吉',desc:'今天機會特別多，很適合嘗試新的事情，運氣旺旺的！',yi:'勇敢嘗試新事情、把握機會',ji:'守舊不變、錯過好機會'},
+  {luck:'中吉',desc:'今天直覺特別準，可能會有小小的好運降臨，像是抽到獎品之類的。',yi:'適度嘗試、把握直覺',ji:'押上全部、完全不嘗試'},
+  {luck:'中吉',desc:'今天很適合到處走走看看，容易發現新奇有趣的事物或機會。',yi:'多出去走走、留意新機會',ji:'整天宅在家、不願意嘗試'},
+  {luck:'大吉',desc:'今天運氣旺，很適合主動跟人提出合作或請求，成功機會很大。',yi:'主動提出請求、積極一點',ji:'等別人主動、消極不行動'},
+  {luck:'平',desc:'今天可能會有意外的零用錢，但也容易花得比較快，要注意平衡。',yi:'記住要存一點、控制花費',ji:'拿到錢就亂花、不知節制'},
+  {luck:'中吉',desc:'今天朋友圈會傳來好消息，可能帶來意外的好處，要多留意。',yi:'多留意朋友消息、保持好人緣',ji:'不理朋友消息、太孤僻'},
+  {luck:'大吉',desc:'今天運氣特別強，很適合大膽試試新東西，會有不錯的收穫。',yi:'大膽嘗試新事物',ji:'太保守、害怕失敗不敢嘗試'},
+  {luck:'平',desc:'今天錢可能來得快也去得快，先不要把零用錢全部花光比較好。',yi:'量入為出、不要花太快',ji:'一次花光所有錢、亂投資'},
+  {luck:'中吉',desc:'今天人緣特別好，出門容易得到別人的關照，跟人相處很愉快。',yi:'多出門社交、跟人好好相處',ji:'整天悶在家裡、拒絕跟人互動'},
+  {luck:'大吉',desc:'今天適合整理一下自己的東西或零用錢，會發現意外的小驚喜。',yi:'整理自己的東西和零用錢',ji:'拖延不整理、放著不管'}
+],
+'正財':[
+  {luck:'大吉',desc:'今天運氣很穩，努力做的事情會有好結果，一步一步來一定有收穫。',yi:'按計畫努力、一步一步來',ji:'衝動亂做決定、浪費東西'},
+  {luck:'中吉',desc:'今天你的努力跟收穫成正比，多花一點力氣就會看到多一點成果。',yi:'認真努力、按時完成任務',ji:'偷懶不做事、半途而廢'},
+  {luck:'中吉',desc:'今天適合整理自己的零用錢或東西，會發現一切都還算順利。',yi:'整理零用錢、檢查自己的東西',ji:'亂花錢不記帳、東西亂放'},
+  {luck:'大吉',desc:'今天表現會被大人或老師看見，可能會得到稱讚或獎勵。',yi:'認真表現、努力做好',ji:'不敢表現自己、放棄機會'},
+  {luck:'中吉',desc:'今天做事效率特別高，平常的功課或任務都能順利完成。',yi:'認真有效率地做事',ji:'拖拖拉拉、亂無頭緒'},
+  {luck:'平',desc:'今天一分耕耘一分收穫，按部就班做事比想走捷徑安全多了。',yi:'按部就班、踏實做事',ji:'想走捷徑、亂投機'},
+  {luck:'大吉',desc:'今天是談合作或約定的好時機，事情會進展得很穩定、令人安心。',yi:'好好商量、確定計畫',ji:'臨時改變主意、半途放棄'},
+  {luck:'中吉',desc:'今天很會精打細算，能用最少的錢買到最划算又實用的東西。',yi:'精打細算、聰明消費',ji:'亂買東西不比較、浪費錢'},
+  {luck:'中吉',desc:'今天因為誠實守信，會得到大家更多的信任，朋友也會更喜歡你。',yi:'誠實守信、維持好朋友關係',ji:'說謊欺騙、讓人不再信任'},
+  {luck:'平',desc:'今天運氣四平八穩，適合存零用錢、做平常熟悉的事，別輕易改變。',yi:'存零用錢、做熟悉的事',ji:'隨便換目標、衝動冒險'}
+],
+'七殺':[
+  {luck:'小凶',desc:'今天壓力比較大，要小心被欺負或情緒不穩定，今天適合靜一靜。',yi:'自己靜一靜、做好準備',ji:'跟人正面衝突、亂發脾氣'},
+  {luck:'中吉',desc:'今天特別有勇氣，很適合挑戰困難的事情，有機會讓大家看見你的厲害。',yi:'挑戰困難的事、展現勇氣',ji:'退縮不敢嘗試、看輕自己'},
+  {luck:'小凶',desc:'今天可能會碰到突然的麻煩事，保持冷靜、慢慢解決就好。',yi:'保持冷靜、想辦法解決',ji:'慌張亂了手腳、跟人硬碰硬'},
+  {luck:'平',desc:'今天行動力很強，但要注意休息，別太累把身體弄壞了。',yi:'適度運動、注意休息',ji:'熬夜不睡、太勉強自己'},
+  {luck:'小凶',desc:'今天容易遇到態度比較強硬的人，用溫和的方式溝通會更好。',yi:'溫和溝通、退一步想',ji:'跟人硬碰硬、正面衝突'},
+  {luck:'中吉',desc:'今天決斷力很強，很適合處理一直拖著沒做的麻煩事。',yi:'勇敢處理麻煩事、做出決定',ji:'猶豫不決、一直拖延'},
+  {luck:'小凶',desc:'今天身心比較緊繃，容易感到緊張，做做伸展或深呼吸會比較舒服。',yi:'深呼吸放鬆、做伸展運動',ji:'硬撐不休息、忽略身體警訊'},
+  {luck:'平',desc:'今天危機就是機會，雖然有點考驗，但冷靜應對就能順利度過。',yi:'冷靜應對、把握轉機',ji:'自己嚇自己、慌亂放棄'},
+  {luck:'小凶',desc:'今天出門要特別小心，注意安全，避免發生小意外。',yi:'小心出門、注意安全',ji:'粗心大意、冒險亂來'},
+  {luck:'中吉',desc:'今天領導力特別強，緊急時刻你可能會挺身而出，讓大家佩服。',yi:'勇敢站出來、帶領大家',ji:'逃避責任、躲在後面不出聲'}
+],
+'正官':[
+  {luck:'中吉',desc:'今天容易得到大人或老師的肯定，做事有條有理，工作會很順利。',yi:'主動跟長輩分享、按規矩做事',ji:'不守規矩、拖延該做的事'},
+  {luck:'中吉',desc:'今天你的好名聲會被更多人知道，適合上台說話或跟別人介紹自己。',yi:'上台表現、跟人正式介紹自己',ji:'言行不一、破壞自己的形象'},
+  {luck:'平',desc:'今天按規矩做事最順利，不要想走捷徑或鑽漏洞。',yi:'按規矩做事、誠實面對',ji:'走捷徑、鑽漏洞'},
+  {luck:'中吉',desc:'今天長輩或老師特別信任你，適合主動報告進度或請教問題。',yi:'主動報告、請教問題',ji:'隱瞞問題、自己悶著不說'},
+  {luck:'中吉',desc:'今天跟大家相處很融洽，公平做事會讓大家更喜歡你。',yi:'公平對待大家、合作做事',ji:'有私心、破壞團隊合作'},
+  {luck:'平',desc:'今天責任感比較重，雖然有點辛苦，但努力會慢慢累積成你的實力。',yi:'認真負責、慢慢累積經驗',ji:'推卸責任、抱怨工作多'},
+  {luck:'中吉',desc:'今天適合處理重要的文件，或答應別人的承諾，記得要做到。',yi:'處理重要事情、做到承諾',ji:'隨便答應、不守信用'},
+  {luck:'平',desc:'今天要注意自己的言行，在大家面前表現好一點，會帶來好運。',yi:'注意言行、表現好榜樣',ji:'在公眾場合失態、亂說話'},
+  {luck:'中吉',desc:'今天考試或考核運氣不錯，腦筋清楚，能寫出令人滿意的答案。',yi:'認真準備考試、清楚思考',ji:'準備不足、臨時放棄'},
+  {luck:'平',desc:'今天生活作息要規律一點，適合改掉壞習慣，養成好的生活節奏。',yi:'調整作息、改掉壞習慣',ji:'作息混亂、放縱自己'}
+],
+'偏印':[
+  {luck:'中吉',desc:'今天領悟力特別高，很適合研究有趣的知識，想法可以更開闊一點。',yi:'研究有趣的知識、靜下心思考',ji:'表面應付社交、隨便答應別人'},
+  {luck:'平',desc:'今天直覺特別敏銳，常有獨特的想法，但別想太多鑽牛角尖。',yi:'相信自己的直覺、獨立思考',ji:'一直鑽牛角尖、亂幻想'},
+  {luck:'中吉',desc:'今天適合一個人安靜地思考或做研究，靈感特別容易出現。',yi:'安靜思考、做喜歡的研究',ji:'勉強自己社交、打斷自己的節奏'},
+  {luck:'平',desc:'今天容易覺得跟別人有點距離，享受獨處的同時，也別忘了關心身邊的人。',yi:'享受獨處、適度關心身邊的人',ji:'完全不理人、忽略身邊的人'},
+  {luck:'平',desc:'今天想法比較特別，但要小心因為太敏感而誤會別人的好意。',yi:'保持開放的心、跟人確認清楚',ji:'多疑亂猜、誤會別人'},
+  {luck:'中吉',desc:'今天觀察力特別好，容易看穿事情的真相，很適合動腦分析事情。',yi:'仔細觀察、動腦分析',ji:'隨便相信表面、不看細節'},
+  {luck:'平',desc:'今天容易覺得有點累，不適合做重大決定，先讓自己休息一下吧。',yi:'好好休息、放空一下',ji:'勉強自己做大決定、太累硬撐'},
+  {luck:'中吉',desc:'今天對冷門但有趣的知識學習效果特別好，很適合多認識新東西。',yi:'學習新知識、深入研究興趣',ji:'追求熱門卻不專心、半途放棄'},
+  {luck:'平',desc:'今天心情容易比較低落，多找正能量的朋友聊聊，別悶著自己。',yi:'找朋友聊聊、保持正向心情',ji:'自己悶著不說、想太多負面的事'},
+  {luck:'中吉',desc:'今天很適合在背後默默規劃，不用搶風頭，默默努力也很厲害。',yi:'默默規劃、低調努力',ji:'急著搶第一、打亂自己的計畫'}
+],
+'正印':[
+  {luck:'中吉',desc:'今天心裡特別安穩，容易得到長輩的幫忙，適合學習新東西或簽訂約定。',yi:'跟長輩請教、認真學習',ji:'自己悶著做、不聽別人建議'},
+  {luck:'大吉',desc:'今天很容易遇到願意幫你的人，遇到困難只要開口問，很容易得到長輩的幫助。',yi:'主動開口求助、感謝幫忙的人',ji:'不開口、固執自己解決'},
+  {luck:'中吉',desc:'今天心裡覺得特別踏實，很適合跟家人好好相處，修補一些小誤會。',yi:'陪伴家人、修補關係',ji:'計較小事、舊事重提'},
+  {luck:'中吉',desc:'今天學習吸收力特別好，適合上課、看書或學新的東西。',yi:'上課學習、看喜歡的書',ji:'原地踏步、拒絕學新東西'},
+  {luck:'大吉',desc:'今天處理重要的事情或文件特別順利，過程會很輕鬆。',yi:'處理重要的事情、整理文件',ji:'拖延辦理、隨便亂寫'},
+  {luck:'中吉',desc:'今天運氣特別好，周圍氣氛和諧，適合常常懷著感謝的心情。',yi:'保持感謝的心、正向思考',ji:'抱怨環境、傳遞負面情緒'},
+  {luck:'平',desc:'今天容易想依賴別人，雖然長輩很疼你，但自己該做的事還是要努力。',yi:'自己努力負責、心懷感謝',ji:'過度依賴別人、把責任丟給別人'},
+  {luck:'大吉',desc:'今天信用很好，你說過的話，別人會百分百相信你。',yi:'說到做到、維持好信用',ji:'說謊不守信、讓人不信任'},
+  {luck:'中吉',desc:'今天適合安靜下來想想自己，或找人聊聊心裡的事，會讓心情變好。',yi:'安靜思考自己、找信任的人聊聊',ji:'逃避面對自己、壓抑情緒'},
+  {luck:'平',desc:'今天運氣平平穩穩，不求做大事，平安過好每一天就是一種幸福。',yi:'維持平穩作息、知足常樂',ji:'急著想出風頭、破壞平靜生活'}
+]
+};
+function getRandomFortune(tenGod) {
+    var pool = FORTUNE_POOL[tenGod];
+    if (!pool) return {luck:'平', desc:'今天平平穩穩，小心一點做事就好。', yi:'—', ji:'—'};
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function getWuxingClass(s) {
+    if ('甲乙'.indexOf(s)>=0) return 'color-wood';
+    if ('丙丁'.indexOf(s)>=0) return 'color-fire';
+    if ('戊己'.indexOf(s)>=0) return 'color-earth';
+    if ('庚辛'.indexOf(s)>=0) return 'color-metal';
+    if ('壬癸'.indexOf(s)>=0) return 'color-water';
+    return '';
+}
+function getWuxingName(s) {
+    if ('甲乙'.indexOf(s)>=0) return '木';
+    if ('丙丁'.indexOf(s)>=0) return '火';
+    if ('戊己'.indexOf(s)>=0) return '土';
+    if ('庚辛'.indexOf(s)>=0) return '金';
+    return '水';
+}
+function getTenGod(dayStem, targetStem) {
+    var me=STEM_DATA[dayStem]; var target=STEM_DATA[targetStem];
+    if (!me||!target) return '';
+    var group=RELATIONS[me.wuxing][target.wuxing]; var same=(me.yang===target.yang);
+    if (group==='比劫') return same?'比肩':'劫財';
+    if (group==='食傷') return same?'食神':'傷官';
+    if (group==='財星') return same?'偏財':'正財';
+    if (group==='官殺') return same?'七殺':'正官';
+    if (group==='印星') return same?'偏印':'正印';
+    return '';
+}
+function calculateFortune(tg, flowStem) {
+    var me=STEM_DATA[tg]; var day=STEM_DATA[flowStem];
+    var group=RELATIONS[me.wuxing][day.wuxing]; var same=(me.yang===day.yang);
+    var tenGod='';
+    if(group==='比劫') tenGod=same?'比肩':'劫財';
+    else if(group==='食傷') tenGod=same?'食神':'傷官';
+    else if(group==='財星') tenGod=same?'偏財':'正財';
+    else if(group==='官殺') tenGod=same?'七殺':'正官';
+    else if(group==='印星') tenGod=same?'偏印':'正印';
+    var r = getRandomFortune(tenGod);
+    return {tenGod:tenGod, luckLevel:r.luck, desc:r.desc, yi:r.yi, ji:r.ji};
+}
+function renderColorAdvice(flowStem) {
+    var wx=STEM_DATA[flowStem].wuxing; var info=COLOR_MAP[wx];
+    var goodHTML=info.good.map(function(c){return '<span style="display:inline-flex;align-items:center;gap:4px;margin-right:8px;"><span class="swatch" style="background:'+c.hex+';"></span>'+c.name+'</span>';}).join('');
+    var avoidHTML=info.avoid.map(function(c){return '<span style="display:inline-flex;align-items:center;gap:4px;margin-right:8px;"><span class="swatch" style="background:'+c.hex+';"></span>'+c.name+'</span>';}).join('');
+    document.getElementById('colorAdvice').innerHTML=
+        '<p style="margin-bottom:8px;font-weight:300;line-height:1.7;">'+info.desc+'</p>'+
+        '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 0;margin-bottom:6px;"><span style="font-size:10px;color:#9CA3AF;margin-right:6px;flex-shrink:0;">宜穿</span>'+goodHTML+'</div>'+
+        '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 0;"><span style="font-size:10px;color:#9CA3AF;margin-right:6px;flex-shrink:0;">避免</span>'+avoidHTML+'</div>';
+}
+function renderSingleFortune(dayStem, flowStem, flowBranch) {
+    var res=calculateFortune(dayStem, flowStem);
+    // yi/ji 已包含在 res 中
+    var lvlStyle='color:#888;';
+    if(res.luckLevel==='大吉') lvlStyle='color:#A65B54;font-weight:bold;';
+    if(res.luckLevel==='中吉') lvlStyle='color:#789262;font-weight:bold;';
+    if(res.luckLevel==='小凶') lvlStyle='color:#5B6E80;';
+    document.getElementById('fortuneSectionLabel').innerText=dayStem+getWuxingName(dayStem)+'・'+res.tenGod;
+
+    // 馬花庫提醒
+    var mhkType = BRANCH_TYPE[flowBranch] || '';
+    var mhkHTML = '';
+    if (mhkType) {
+        var mhkTagClass = BRANCH_TYPE_CLASS[mhkType] || '';
+        var mhkText = getRandomMhk(mhkType);
+        mhkHTML =
+            '<div class="mb-3 pb-3" style="border-bottom:0.5px solid #E0DCD3;">'+
+                '<div class="flex items-center gap-1.5 mb-1.5">'+
+                    '<span class="text-[10px] font-serif px-1.5 py-0.5 rounded-sm '+mhkTagClass+'">今日'+mhkType+'日</span>'+
+                '</div>'+
+                '<p class="text-[11px] text-gray-600 font-light leading-relaxed">'+mhkText+'</p>'+
+            '</div>';
+    }
+
+    document.getElementById('fortuneDetail').innerHTML=
+        '<div class="flex items-center gap-2 mb-3">'+
+            '<div class="font-serif text-2xl font-bold '+getWuxingClass(dayStem)+'">'+dayStem+'</div>'+
+            '<div>'+
+                '<div class="text-[10px] text-gray-400">'+getWuxingName(dayStem)+'・'+(STEM_DATA[dayStem].yang?'陽':'陰')+'</div>'+
+                '<div class="font-serif text-xs" style="'+lvlStyle+'">['+res.luckLevel+'] '+res.tenGod+'</div>'+
+            '</div>'+
+        '</div>'+
+        '<p class="text-[11px] text-gray-600 font-light leading-relaxed mb-3 pb-3" style="border-bottom:0.5px solid #E0DCD3;">'+res.desc+'</p>'+
+        mhkHTML+
+        '<div class="mb-2"><div class="flex items-start gap-2">'+
+            '<span class="text-[10px] font-serif shrink-0 mt-0.5 px-1.5 py-0.5 rounded-sm" style="background:#EEF5EE;color:#6B7A6A;">宜</span>'+
+            '<span class="text-[11px] text-gray-600 font-light leading-relaxed">'+res.yi+'</span>'+
+        '</div></div>'+
+        '<div><div class="flex items-start gap-2">'+
+            '<span class="text-[10px] font-serif shrink-0 mt-0.5 px-1.5 py-0.5 rounded-sm" style="background:#F5EDEC;color:#A65B54;">忌</span>'+
+            '<span class="text-[11px] text-gray-600 font-light leading-relaxed">'+res.ji+'</span>'+
+        '</div></div>';
+    document.getElementById('fortuneSection').classList.remove('hidden');
+}
+function initSelects() {
+    var yearSel=document.getElementById('birthYear');
+    for(var y=2030;y>=1930;y--){var opt=document.createElement('option');opt.value=y;opt.textContent=y+'年';if(y===1990)opt.selected=true;yearSel.appendChild(opt);}
+    var monthSel=document.getElementById('birthMonth');
+    var mn=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+    for(var m=1;m<=12;m++){var opt=document.createElement('option');opt.value=m;opt.textContent=mn[m-1];monthSel.appendChild(opt);}
+    var daySel=document.getElementById('birthDay');
+    for(var d=1;d<=31;d++){var opt=document.createElement('option');opt.value=d;opt.textContent=d+'日';daySel.appendChild(opt);}
+}
+var flowStemGlobal='';
+var flowBranchGlobal='';
+function calcBaZi(skipSave) {
+    var y=parseInt(document.getElementById('birthYear').value);
+    var m=parseInt(document.getElementById('birthMonth').value);
+    var d=parseInt(document.getElementById('birthDay').value);
+    var h=parseInt(document.getElementById('birthHour').value);
+    var name=document.getElementById('birthName').value.trim();
+    try {
+        var solar=Solar.fromYmdHms(y,m,d,h,0,0);
+        var lunar=solar.getLunar();
+        var ec=lunar.getEightChar();
+        var pillars=[ec.getYear(),ec.getMonth(),ec.getDay(),ec.getTime()];
+        var dayStem=pillars[2][0];
+        var grid=document.getElementById('pillarsGrid');
+        grid.innerHTML='';
+        pillars.forEach(function(p,i){
+            var stem=p[0];var branch=p[1];
+            var wx=STEM_DATA[stem]?STEM_DATA[stem].wuxing:'土';
+            var bg=WUXING_BG[wx]||'#FAFAF9';
+            var isDay=(i===2);
+            var tenGodHTML=isDay
+                ?'<div class="text-[9px] text-[#A65B54] font-serif mt-1">日主</div>'
+                :'<div class="text-[9px] font-serif px-1 py-px rounded-sm mt-1" style="background:#F0EFED;color:#888;">'+getTenGod(dayStem,stem)+'</div>';
+            var mhk=BRANCH_TYPE[branch]||'';
+            var mhkClass=BRANCH_TYPE_CLASS[mhk]||'';
+            var mhkHTML=mhk
+                ?'<div class="text-[9px] font-serif px-1 py-px rounded-sm mt-0.5 '+mhkClass+'">'+mhk+'</div>'
+                :'<div class="text-[9px] mt-0.5" style="visibility:hidden;">佔</div>';
+            var card=document.createElement('div');
+            card.className='pillar-card p-2 text-center flex-1';
+            card.style.backgroundColor=bg;
+            card.innerHTML='<div class="text-[9px] text-gray-400 mb-1">'+PILLAR_LABELS[i]+'</div>'+
+                tenGodHTML+
+                '<div class="font-serif text-lg font-bold leading-snug mt-0.5">'+
+                '<span class="'+getWuxingClass(stem)+' block">'+stem+'</span>'+
+                '<span class="'+getWuxingClass(branch)+' block">'+branch+'</span></div>'+
+                mhkHTML;
+            grid.appendChild(card);
+        });
+        var dayWx=STEM_DATA[dayStem]?STEM_DATA[dayStem].wuxing:'';
+        document.getElementById('dayMasterBox').innerHTML=
+            (name ? '<div class="text-[11px] text-[#A65B54] font-serif mb-1">'+name+'</div>' : '')+
+            '<div class="text-[10px] text-gray-400 mb-1">日主</div>'+
+            '<div class="font-serif text-2xl font-bold '+getWuxingClass(dayStem)+'">'+dayStem+'</div>'+
+            '<div class="text-[11px] text-gray-500 mt-1">'+dayWx+'・'+(STEM_DATA[dayStem].yang?'陽':'陰')+'</div>'+
+            '<div class="text-[10px] text-gray-400 mt-2 font-light leading-relaxed">今日運勢詳見下方解析。</div>';
+        document.getElementById('baziResult').classList.remove('hidden');
+        renderSingleFortune(dayStem, flowStemGlobal, flowBranchGlobal);
+
+        // 儲存本次排盤資料到歷史命盤（最多 2 筆）
+        if (!skipSave) {
+            saveToHistory({y:y, m:m, d:d, h:h, name:name});
+            setTimeout(function(){document.getElementById('fortuneSection').scrollIntoView({behavior:'smooth',block:'start'});},100);
+        }
+        renderHistoryChips();
+    } catch(e){alert('排盤失敗，請確認出生日期是否正確。');console.error(e);}
+}
+
+// ── 歷史命盤管理（最多 2 筆，新進覆蓋最舊）──
+function getHistory() {
+    try {
+        var raw = localStorage.getItem('guangyao_history');
+        return raw ? JSON.parse(raw) : [];
+    } catch(e) { return []; }
+}
+function setHistory(list) {
+    try { localStorage.setItem('guangyao_history', JSON.stringify(list)); } catch(e) {}
+}
+function saveToHistory(entry) {
+    var list = getHistory();
+    var key = entry.y+'-'+entry.m+'-'+entry.d+'-'+entry.h;
+    var existingIndex = -1;
+    for (var i=0; i<list.length; i++) {
+        if ((list[i].y+'-'+list[i].m+'-'+list[i].d+'-'+list[i].h) === key) { existingIndex = i; break; }
+    }
+    if (existingIndex >= 0) {
+        // 已存在同一筆生日資料，只更新名字
+        list[existingIndex] = entry;
+        setHistory(list);
+        localStorage.setItem('guangyao_bazi', JSON.stringify(entry));
+        return true;
+    }
+    if (list.length >= 2) {
+        alert('歷史命盤已存滿 2 筆，請先刪除一筆再新增。');
+        return false;
+    }
+    list.push(entry);
+    setHistory(list);
+    localStorage.setItem('guangyao_bazi', JSON.stringify(entry));
+    return true;
+}
+function removeHistory(index, evt) {
+    if (evt) evt.stopPropagation();
+    var list = getHistory();
+    list.splice(index, 1);
+    setHistory(list);
+    renderHistoryChips();
+}
+function loadHistory(index) {
+    var list = getHistory();
+    var entry = list[index];
+    if (!entry) return;
+    document.getElementById('birthYear').value = entry.y;
+    document.getElementById('birthMonth').value = entry.m;
+    document.getElementById('birthDay').value = entry.d;
+    document.getElementById('birthHour').value = entry.h;
+    document.getElementById('birthName').value = entry.name || '';
+    calcBaZi(true);
+    renderHistoryChips(index);
+}
+function renderHistoryChips(activeIndex) {
+    var list = getHistory();
+    var section = document.getElementById('historySection');
+    var container = document.getElementById('historyChips');
+    if (!list.length) { section.classList.add('hidden'); return; }
+    section.classList.remove('hidden');
+    container.innerHTML = '';
+    list.forEach(function(item, i) {
+        var label = item.name ? item.name : (item.y+'年生');
+        var chip = document.createElement('div');
+        chip.className = 'history-chip pl-3 pr-1.5 py-1.5 text-[11px] font-serif flex items-center gap-2' + (i===activeIndex ? ' history-chip-active' : '');
+
+        var nameSpan = document.createElement('span');
+        nameSpan.textContent = label;
+        nameSpan.style.cursor = 'pointer';
+        nameSpan.addEventListener('click', function(){ loadHistory(i); });
+
+        var delBtn = document.createElement('span');
+        delBtn.textContent = '×';
+        delBtn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;color:#bbb;font-size:14px;cursor:pointer;';
+        delBtn.addEventListener('click', function(e){
+            e.stopPropagation();
+            if (confirm('確定要刪除「'+label+'」這筆命盤紀錄嗎？')) {
+                removeHistory(i);
+            }
+        });
+        delBtn.addEventListener('mouseenter', function(){ delBtn.style.background='#F0DADA'; delBtn.style.color='#A65B54'; });
+        delBtn.addEventListener('mouseleave', function(){ delBtn.style.background='transparent'; delBtn.style.color='#bbb'; });
+
+        chip.appendChild(nameSpan);
+        chip.appendChild(delBtn);
+        container.appendChild(chip);
+    });
+}
+window.onload=function(){
+    initSelects();
+    var today=new Date();
+    var y=today.getFullYear();var m=today.getMonth()+1;var d=today.getDate();
+    document.getElementById('currentDateText').innerText='公曆 '+y+'年'+m+'月'+d+'日';
+    try{
+        var solar=Solar.fromYmdHms(y,m,d,12,0,0);
+        var lunar=solar.getLunar();
+        var flowDay=lunar.getEightChar().getDay();
+        var flowStem=flowDay[0];var flowBranch=flowDay[1];
+        flowStemGlobal=flowStem;
+        flowBranchGlobal=flowBranch;
+        document.getElementById('lunarDateText').innerText='舊曆 '+lunar.getYearInGanZhi()+'年 '+lunar.getMonthInChinese()+'月'+lunar.getDayInChinese();
+        document.getElementById('flowDayPillar').innerHTML='<span class="'+getWuxingClass(flowStem)+'">'+flowStem+'</span><span class="'+getWuxingClass(flowBranch)+'">'+flowBranch+'</span>';
+        document.getElementById('jieQiText').innerText='目前處於「'+lunar.getPrevJieQi(true).getName()+'」節氣管轄範圍';
+        renderColorAdvice(flowStem);
+    }catch(e){document.getElementById('lunarDateText').innerText='農曆資料載入失敗，請重新整理。';console.error(e);}
+
+    // 讀取歷史命盤清單並顯示標籤
+    renderHistoryChips(0);
+
+    // 自動帶入最近一次排盤資料並顯示結果
+    try {
+        var list = getHistory();
+        if (list.length) {
+            var entry = list[0];
+            document.getElementById('birthYear').value = entry.y;
+            document.getElementById('birthMonth').value = entry.m;
+            document.getElementById('birthDay').value = entry.d;
+            document.getElementById('birthHour').value = entry.h;
+            document.getElementById('birthName').value = entry.name || '';
+            calcBaZi(true);
+        } else {
+            // 相容舊版單筆儲存資料
+            var saved = localStorage.getItem('guangyao_bazi');
+            if (saved) {
+                var old = JSON.parse(saved);
+                document.getElementById('birthYear').value = old.y;
+                document.getElementById('birthMonth').value = old.m;
+                document.getElementById('birthDay').value = old.d;
+                document.getElementById('birthHour').value = old.h;
+                calcBaZi(true);
+            }
+        }
+    } catch(e) { console.warn('無法讀取上次命盤資料', e); }
+};
+</script>
+
+</body>
+</html>
