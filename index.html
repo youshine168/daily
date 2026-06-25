@@ -43,6 +43,7 @@
         .tag-hua { background:#F9EEF0; color:#A65B54; }
         .tag-ku  { background:#F4F1EB; color:#B0A18E; }
     </style>
+    <link rel="manifest" href="manifest.json">
 </head>
 <body class="py-6 px-4 pb-10">
 <div class="w-full max-w-md mx-auto">
@@ -627,6 +628,14 @@ window.onload=function(){
         }
     } catch(e) { console.warn('無法讀取上次命盤資料', e); }
 };
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(console.error);
+  });
+}
 </script>
 
 </body>
