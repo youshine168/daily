@@ -443,7 +443,7 @@ function renderSingleFortune(dayStem, flowStem, flowBranch) {
 }
 function initSelects() {
     var yearSel=document.getElementById('birthYear');
-    for(var y=2030;y>=1930;y--){var opt=document.createElement('option');opt.value=y;opt.textContent=y+'年';if(y===1990)opt.selected=true;yearSel.appendChild(opt);}
+    for(var y=2030;y>=1900;y--){var opt=document.createElement('option');opt.value=y;opt.textContent=y+'年';if(y===1990)opt.selected=true;yearSel.appendChild(opt);}
     var monthSel=document.getElementById('birthMonth');
     var mn=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
     for(var m=1;m<=12;m++){var opt=document.createElement('option');opt.value=m;opt.textContent=mn[m-1];monthSel.appendChild(opt);}
