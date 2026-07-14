@@ -21,6 +21,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lunar-javascript/lunar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #F7F6F5; color: #333333; }
         .font-serif { font-family: 'Noto Serif TC', serif; }
@@ -42,6 +43,48 @@
         .tag-ma  { background:#EEF1ED; color:#6B7A6A; }
         .tag-hua { background:#F9EEF0; color:#A65B54; }
         .tag-ku  { background:#F4F1EB; color:#B0A18E; }
+
+        /* ── 命盤四柱樣式（參考 BAZICHART） ── */
+        .bz-chart { display:flex; gap:5px; }
+        .bz-col { flex:1; min-width:0; border:0.5px solid #E0DCD3; border-radius:8px; background:#fff; overflow:hidden; }
+        .bz-col-head { text-align:center; font-size:10px; color:#9a948a; padding:5px 0; border-bottom:0.5px solid #EFEBE2; font-family:'Noto Serif TC',serif; line-height:1.3; }
+        .bz-col-head .sub { display:block; font-size:8px; }
+        .bz-col.is-day .bz-col-head { background:#6E7658; color:#EDE9DD; }
+        .bz-tg { text-align:center; padding:6px 0 3px; }
+        .bz-tg span { font-size:10px; border:0.5px solid #D8D2C4; border-radius:4px; padding:1px 5px; color:#6b6459; font-family:'Noto Serif TC',serif; }
+        .bz-stem { text-align:center; font-family:'Noto Serif TC',serif; font-weight:700; font-size:28px; line-height:1.15; }
+        .bz-stem-label { text-align:center; font-size:9px; color:#a8a297; margin:1px 0 4px; }
+        .bz-branch { text-align:center; font-family:'Noto Serif TC',serif; font-weight:700; font-size:28px; padding:6px 0; border-top:0.5px solid #EFEBE2; }
+        .bz-hide { border-top:0.5px solid #EFEBE2; padding:5px 4px; display:flex; flex-direction:column; gap:3px; }
+        .bz-hide div { text-align:center; font-size:9px; font-family:'Noto Serif TC',serif; border:0.5px solid #EAE5DA; border-radius:4px; padding:1px 0; }
+
+        /* ── 分類快選 ── */
+        .cat-filter { font-size:10px; border:0.5px solid #E0DCD3; border-radius:999px; padding:3px 10px; cursor:pointer; color:#888; }
+        .cat-filter-active { border-color:#C9A24A; background:#FBF6E9; color:#8a6d1f; }
+        .chip-cat { font-size:9px; color:#a8a297; border:0.5px solid #E5E0D5; border-radius:4px; padding:0 4px; margin-left:4px; }
+
+        /* ── 儲存命盤圖卡 + 彈窗 ── */
+        .save-modal { display:none; position:fixed; inset:0; z-index:10000; background:rgba(20,18,14,0.75); overflow:auto; padding:20px 12px; }
+        .save-modal-box { max-width:480px; margin:0 auto; }
+        #saveCardWrap { display:flex; justify-content:center; }
+        #saveCard { width:100%; max-width:460px; background:#F1EEE7; border:1px solid #E0DCD3; padding:22px 18px; font-family:'Noto Serif TC',serif; }
+        .sc-head { text-align:center; margin-bottom:12px; }
+        .sc-brand { letter-spacing:6px; font-size:11px; color:#b3ab9c; }
+        .sc-sub { font-size:10px; color:#b3ab9c; letter-spacing:2px; margin-top:5px; }
+        .sc-title { text-align:center; font-size:20px; font-weight:700; color:#2b2b2b; margin:8px 0 3px; }
+        .sc-gender { text-align:center; font-size:11px; color:#9a948a; }
+        .sc-name { text-align:center; font-size:12px; color:#A65B54; margin-top:2px; }
+        .sc-chart { margin:14px 0; }
+        .wx-row { display:flex; gap:5px; margin-top:8px; }
+        .wx-item { flex:1; border:0.5px solid #E0DCD3; background:#fff; border-radius:6px; padding:8px 0; text-align:center; }
+        .wx-top { font-size:12px; color:#6b6459; display:flex; align-items:center; justify-content:center; gap:4px; }
+        .wx-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+        .wx-num { font-size:18px; font-weight:700; color:#2b2b2b; margin-top:2px; }
+        .sc-foot { text-align:center; font-size:9px; color:#b3ab9c; letter-spacing:2px; margin-top:14px; }
+        .save-modal-btns { display:flex; gap:10px; justify-content:center; margin-top:16px; }
+        .save-modal-btns button { padding:10px 22px; border-radius:8px; font-size:13px; font-family:'Noto Serif TC',serif; cursor:pointer; border:none; }
+        .smb-download { background:#C9A24A; color:#231d10; }
+        .smb-close { background:#fff; color:#555; border:0.5px solid #ccc; }
     </style>
     <link rel="manifest" href="manifest.json">
 </head>
@@ -122,17 +165,37 @@
                 </select>
             </div>
         </div>
+        <div class="grid grid-cols-2 gap-2 mb-2">
+            <div>
+                <label class="text-[10px] text-gray-400 block mb-1">性別</label>
+                <select id="birthGender" class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none pr-6">
+                    <option value="男">男命</option>
+                    <option value="女">女命</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-[10px] text-gray-400 block mb-1">分類（選填）</label>
+                <select id="birthCat" class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none pr-6">
+                    <option value="">未分類</option>
+                    <option>家人</option><option>朋友</option><option>客戶</option><option>自己</option><option>其他</option>
+                </select>
+            </div>
+        </div>
         <button onclick="calcBaZi()" class="btn-calc w-full py-2 text-xs tracking-widest font-serif mt-1">排 盤</button>
 
-        <!-- 歷史命盤 -->
+        <button id="saveChartBtn" onclick="openSaveModal()" class="w-full border-thin py-2 text-xs font-serif mt-2 hidden" style="background:#FBF6E9;border-color:#C9A24A;color:#8a6d1f;">💾 儲存命盤</button>
+        <a href="https://youshine168.github.io/bazipaipanclient/" target="_blank" rel="noopener" class="w-full border-thin py-2 text-xs font-serif mt-2 block text-center" style="color:#6E7658;">前往完整排盤系統 →</a>
+
+        <!-- 歷史排盤 -->
         <div id="historySection" class="mt-3 hidden">
-            <div class="text-[10px] text-gray-400 mb-1.5">歷史命盤（最多 2 筆，點選名字切換）</div>
+            <div class="text-[10px] text-gray-400 mb-1.5">歷史排盤（點名字切換，可存多筆）</div>
+            <div id="historyFilters" class="flex flex-wrap gap-1.5 mb-2"></div>
             <div id="historyChips" class="flex flex-wrap gap-2"></div>
         </div>
 
         <div id="baziResult" class="mt-4 hidden">
-            <div class="flex flex-row-reverse gap-1.5 mb-3" id="pillarsGrid"></div>
-            <div class="day-master-box p-3 text-center bg-[#FAFAF9]" id="dayMasterBox"></div>
+            <div id="chartNameLabel" class="text-center text-[11px] text-[#A65B54] font-serif mb-2 hidden"></div>
+            <div id="pillarsGrid"></div>
         </div>
     </section>
 
@@ -152,8 +215,22 @@
     </div>
 
 </div>
+
+<!-- 儲存命盤彈窗 -->
+<div id="saveModal" class="save-modal">
+    <div class="save-modal-box">
+        <div id="saveCardWrap"></div>
+        <div class="save-modal-btns">
+            <button onclick="downloadCard()" class="smb-download">⬇ 下載圖片</button>
+            <button onclick="closeSaveModal()" class="smb-close">關閉</button>
+        </div>
+    </div>
+</div>
+
 <script>
 var PILLAR_LABELS = ['年柱','月柱','日柱','時柱'];
+var BRANCH_WUXING = {'子':'水','丑':'土','寅':'木','卯':'木','辰':'土','巳':'火','午':'火','未':'土','申':'金','酉':'金','戌':'土','亥':'水'};
+var BRANCH_HIDE = {'子':['癸'],'丑':['己','癸','辛'],'寅':['甲','丙','戊'],'卯':['乙'],'辰':['戊','乙','癸'],'巳':['丙','戊','庚'],'午':['丁','己'],'未':['己','丁','乙'],'申':['庚','壬','戊'],'酉':['辛'],'戌':['戊','辛','丁'],'亥':['壬','甲']};
 var STEM_DATA = {
     '甲':{wuxing:'木',yang:true},'乙':{wuxing:'木',yang:false},
     '丙':{wuxing:'火',yang:true},'丁':{wuxing:'火',yang:false},
@@ -450,6 +527,77 @@ function initSelects() {
     var daySel=document.getElementById('birthDay');
     for(var d=1;d<=31;d++){var opt=document.createElement('option');opt.value=d;opt.textContent=d+'日';daySel.appendChild(opt);}
 }
+// ── 命盤四柱 HTML（圖二樣式，命盤與圖卡共用）──
+function buildPillarChartHTML(pillars, dayStem) {
+    var order=[3,2,1,0]; // 顯示順序：時 日 月 年
+    var html='<div class="bz-chart">';
+    order.forEach(function(idx){
+        var stem=pillars[idx][0], branch=pillars[idx][1];
+        var isDay=(idx===2);
+        var head=isDay
+            ?'<div class="bz-col-head">日柱<span class="sub">日元</span></div>'
+            :'<div class="bz-col-head">'+PILLAR_LABELS[idx]+'<span class="sub">&nbsp;</span></div>';
+        var tg=isDay
+            ?'<div class="bz-tg"><span style="visibility:hidden;">日元</span></div>'
+            :'<div class="bz-tg"><span>'+getTenGod(dayStem,stem)+'</span></div>';
+        var label=STEM_DATA[stem]?((STEM_DATA[stem].yang?'陽':'陰')+STEM_DATA[stem].wuxing):'';
+        var hide=BRANCH_HIDE[branch]||[];
+        var hideHTML=hide.map(function(hs){
+            return '<div class="'+getWuxingClass(hs)+'">'+hs+' '+getTenGod(dayStem,hs)+'</div>';
+        }).join('');
+        html+='<div class="bz-col'+(isDay?' is-day':'')+'">'+head+tg+
+            '<div class="bz-stem '+getWuxingClass(stem)+'">'+stem+'</div>'+
+            '<div class="bz-stem-label">'+label+'</div>'+
+            '<div class="bz-branch '+getWuxingClass(branch)+'">'+branch+'</div>'+
+            '<div class="bz-hide">'+hideHTML+'</div>'+
+        '</div>';
+    });
+    return html+'</div>';
+}
+function countWuxing(pillars) {
+    var c={'木':0,'火':0,'土':0,'金':0,'水':0};
+    pillars.forEach(function(p){
+        var sw=STEM_DATA[p[0]]?STEM_DATA[p[0]].wuxing:null; if(sw)c[sw]++;
+        var bw=BRANCH_WUXING[p[1]]; if(bw)c[bw]++;
+    });
+    return c;
+}
+
+// ── 儲存命盤圖卡（圖一樣式，不含命卦）──
+var lastChart=null;
+function buildSaveCardHTML(ctx) {
+    var title=ctx.y+'年'+ctx.m+'月'+ctx.d+'日 · '+ctx.pillars[3][1]+'時';
+    var wx=countWuxing(ctx.pillars);
+    var dots={'木':'#6B7A6A','火':'#A65B54','土':'#B0A18E','金':'#8f9668','水':'#5B6E80'};
+    var wxHTML=['木','火','土','金','水'].map(function(k){
+        return '<div class="wx-item"><div class="wx-top"><span class="wx-dot" style="background:'+dots[k]+'"></span>'+k+'</div><div class="wx-num">'+wx[k]+'</div></div>';
+    }).join('');
+    return '<div id="saveCard">'+
+        '<div class="sc-head"><div class="sc-brand">BAZICHART</div><div class="sc-sub">你的四柱八字 · 主星面板</div></div>'+
+        '<div class="sc-title">'+title+'</div>'+
+        '<div class="sc-gender">'+(ctx.gender==='女'?'女命':'男命')+'</div>'+
+        (ctx.name?'<div class="sc-name">'+ctx.name+'</div>':'')+
+        '<div class="sc-chart">'+buildPillarChartHTML(ctx.pillars,ctx.dayStem)+'</div>'+
+        '<div class="wx-row">'+wxHTML+'</div>'+
+        '<div class="sc-foot">命理僅供參考 · 知命善用</div>'+
+    '</div>';
+}
+function openSaveModal() {
+    if(!lastChart){alert('請先排盤');return;}
+    document.getElementById('saveCardWrap').innerHTML=buildSaveCardHTML(lastChart);
+    document.getElementById('saveModal').style.display='block';
+}
+function closeSaveModal() { document.getElementById('saveModal').style.display='none'; }
+function downloadCard() {
+    var el=document.getElementById('saveCard');
+    html2canvas(el,{scale:2,backgroundColor:'#F1EEE7',useCORS:true}).then(function(canvas){
+        var link=document.createElement('a');
+        link.download='光耀命盤_'+(lastChart.name||lastChart.y+'年')+'.png';
+        link.href=canvas.toDataURL('image/png');
+        link.click();
+    }).catch(function(e){alert('圖片產生失敗，請重試');console.error(e);});
+}
+
 var flowStemGlobal='';
 var flowBranchGlobal='';
 function calcBaZi(skipSave) {
@@ -464,45 +612,19 @@ function calcBaZi(skipSave) {
         var ec=lunar.getEightChar();
         var pillars=[ec.getYear(),ec.getMonth(),ec.getDay(),ec.getTime()];
         var dayStem=pillars[2][0];
-        var grid=document.getElementById('pillarsGrid');
-        grid.innerHTML='';
-        pillars.forEach(function(p,i){
-            var stem=p[0];var branch=p[1];
-            var wx=STEM_DATA[stem]?STEM_DATA[stem].wuxing:'土';
-            var bg=WUXING_BG[wx]||'#FAFAF9';
-            var isDay=(i===2);
-            var tenGodHTML=isDay
-                ?'<div class="text-[9px] text-[#A65B54] font-serif mt-1">日主</div>'
-                :'<div class="text-[9px] font-serif px-1 py-px rounded-sm mt-1" style="background:#F0EFED;color:#888;">'+getTenGod(dayStem,stem)+'</div>';
-            var mhk=BRANCH_TYPE[branch]||'';
-            var mhkClass=BRANCH_TYPE_CLASS[mhk]||'';
-            var mhkHTML=mhk
-                ?'<div class="text-[9px] font-serif px-1 py-px rounded-sm mt-0.5 '+mhkClass+'">'+mhk+'</div>'
-                :'<div class="text-[9px] mt-0.5" style="visibility:hidden;">佔</div>';
-            var card=document.createElement('div');
-            card.className='pillar-card p-2 text-center flex-1';
-            card.style.backgroundColor=bg;
-            card.innerHTML='<div class="text-[9px] text-gray-400 mb-1">'+PILLAR_LABELS[i]+'</div>'+
-                tenGodHTML+
-                '<div class="font-serif text-lg font-bold leading-snug mt-0.5">'+
-                '<span class="'+getWuxingClass(stem)+' block">'+stem+'</span>'+
-                '<span class="'+getWuxingClass(branch)+' block">'+branch+'</span></div>'+
-                mhkHTML;
-            grid.appendChild(card);
-        });
-        var dayWx=STEM_DATA[dayStem]?STEM_DATA[dayStem].wuxing:'';
-        document.getElementById('dayMasterBox').innerHTML=
-            (name ? '<div class="text-[11px] text-[#A65B54] font-serif mb-1">'+name+'</div>' : '')+
-            '<div class="text-[10px] text-gray-400 mb-1">日主</div>'+
-            '<div class="font-serif text-2xl font-bold '+getWuxingClass(dayStem)+'">'+dayStem+'</div>'+
-            '<div class="text-[11px] text-gray-500 mt-1">'+dayWx+'・'+(STEM_DATA[dayStem].yang?'陽':'陰')+'</div>'+
-            '<div class="text-[10px] text-gray-400 mt-2 font-light leading-relaxed">今日運勢詳見下方解析。</div>';
+        document.getElementById('pillarsGrid').innerHTML=buildPillarChartHTML(pillars, dayStem);
+        var nameLabel=document.getElementById('chartNameLabel');
+        if(name){nameLabel.textContent=name;nameLabel.classList.remove('hidden');}
+        else{nameLabel.classList.add('hidden');}
         document.getElementById('baziResult').classList.remove('hidden');
+        document.getElementById('saveChartBtn').classList.remove('hidden');
+        var gender=document.getElementById('birthGender').value;
+        lastChart={pillars:pillars, dayStem:dayStem, y:y, m:m, d:d, h:h, name:name, gender:gender};
         renderSingleFortune(dayStem, flowStemGlobal, flowBranchGlobal);
 
-        // 儲存本次排盤資料到歷史命盤（最多 2 筆）
+        // 儲存本次排盤資料到歷史排盤
         if (!skipSave) {
-            saveToHistory({y:y, m:m, d:d, h:h, name:name});
+            saveToHistory({y:y, m:m, d:d, h:h, name:name, cat:document.getElementById('birthCat').value, gender:gender});
             setTimeout(function(){document.getElementById('fortuneSection').scrollIntoView({behavior:'smooth',block:'start'});},100);
         }
         renderHistoryChips();
@@ -527,15 +649,11 @@ function saveToHistory(entry) {
         if ((list[i].y+'-'+list[i].m+'-'+list[i].d+'-'+list[i].h) === key) { existingIndex = i; break; }
     }
     if (existingIndex >= 0) {
-        // 已存在同一筆生日資料，只更新名字
+        // 已存在同一筆生日資料，更新名字與分類
         list[existingIndex] = entry;
         setHistory(list);
         localStorage.setItem('guangyao_bazi', JSON.stringify(entry));
         return true;
-    }
-    if (list.length >= 2) {
-        alert('歷史命盤已存滿 2 筆，請先刪除一筆再新增。');
-        return false;
     }
     list.push(entry);
     setHistory(list);
@@ -558,23 +676,45 @@ function loadHistory(index) {
     document.getElementById('birthDay').value = entry.d;
     document.getElementById('birthHour').value = entry.h;
     document.getElementById('birthName').value = entry.name || '';
+    document.getElementById('birthCat').value = entry.cat || '';
+    document.getElementById('birthGender').value = entry.gender || '男';
     calcBaZi(true);
     renderHistoryChips(index);
 }
+var historyFilter = '';
 function renderHistoryChips(activeIndex) {
     var list = getHistory();
     var section = document.getElementById('historySection');
     var container = document.getElementById('historyChips');
     if (!list.length) { section.classList.add('hidden'); return; }
     section.classList.remove('hidden');
+
+    // 分類篩選按鈕（只有兩種以上分類時才顯示）
+    var cats = [];
+    list.forEach(function(it){ var c=it.cat||'未分類'; if(cats.indexOf(c)<0) cats.push(c); });
+    var fc = document.getElementById('historyFilters');
+    fc.innerHTML = '';
+    if (cats.length > 1) {
+        ['全部'].concat(cats).forEach(function(c){
+            var key = (c==='全部') ? '' : c;
+            var b = document.createElement('span');
+            b.className = 'cat-filter' + (historyFilter===key ? ' cat-filter-active' : '');
+            b.textContent = c;
+            b.addEventListener('click', function(){ historyFilter=key; renderHistoryChips(activeIndex); });
+            fc.appendChild(b);
+        });
+    }
+
     container.innerHTML = '';
     list.forEach(function(item, i) {
+        var cat = item.cat || '未分類';
+        if (historyFilter && cat !== historyFilter) return;
         var label = item.name ? item.name : (item.y+'年生');
         var chip = document.createElement('div');
         chip.className = 'history-chip pl-3 pr-1.5 py-1.5 text-[11px] font-serif flex items-center gap-2' + (i===activeIndex ? ' history-chip-active' : '');
 
         var nameSpan = document.createElement('span');
-        nameSpan.textContent = label;
+        nameSpan.innerHTML = label + (item.cat ? ' <span class="chip-cat">'+item.cat+'</span>' : '');
         nameSpan.style.cursor = 'pointer';
         nameSpan.addEventListener('click', function(){ loadHistory(i); });
 
@@ -626,6 +766,8 @@ window.onload=function(){
             document.getElementById('birthDay').value = entry.d;
             document.getElementById('birthHour').value = entry.h;
             document.getElementById('birthName').value = entry.name || '';
+            document.getElementById('birthCat').value = entry.cat || '';
+            document.getElementById('birthGender').value = entry.gender || '男';
             calcBaZi(true);
         } else {
             // 相容舊版單筆儲存資料
