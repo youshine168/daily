@@ -34,7 +34,7 @@
         select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; border-radius: 8px; }
         input[type="text"] { border-radius: 8px; }
         .pillar-card { border: 0.5px solid #E0DCD3; border-radius: 10px; }
-        .btn-calc { background-color: #333; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+        .btn-calc { background-color: #A65B54; color: #fff; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 6px rgba(166,91,84,.28); }
         .day-master-box { border: 2px solid #C9A24A; border-radius: 12px; }
         .history-chip { border: 0.5px solid #E0DCD3; border-radius: 999px; cursor: pointer; transition: background 0.15s; }
         .history-chip:hover { background-color: #F0EEEA; }
@@ -110,21 +110,40 @@
         <p class="text-[11px] text-gray-400 mt-0.5">流日天機 · 知命善用</p>
     </header>
 
-    <section class="bg-white border-thin rounded-sm p-4 mb-4 text-center">
+    <div id="greetingBanner" class="text-center mb-5 hidden">
+        <div class="text-lg font-serif font-bold" style="color:#A65B54" id="greetingText"></div>
+        <div class="text-[12px] text-gray-500 mt-1" id="greetingSub"></div>
+    </div>
+
+    <section class="bg-white border-thin rounded-sm p-5 mb-5 text-center">
         <div class="text-[11px] text-gray-400 tracking-wider mb-1" id="currentDateText">公曆載入中…</div>
         <div class="text-xs font-medium mb-2" id="lunarDateText">舊曆載入中…</div>
         <hr class="border-t-[0.5px] border-[#E0DCD3] my-2 w-8 mx-auto">
         <div class="text-[10px] text-gray-400 mb-0.5">今日流日</div>
         <div class="text-2xl font-bold font-serif my-1" id="flowDayPillar">--</div>
         <div class="text-[11px] text-gray-500 font-serif mt-1" id="jieQiText">節氣載入中…</div>
+        <hr class="border-t-[0.5px] border-[#E0DCD3] my-3 w-8 mx-auto">
+        <div class="text-[10px] text-gray-400 mb-2">今日幸運生肖</div>
+        <div id="luckyZodiac" class="flex justify-center gap-4 mb-2"></div>
+        <div id="luckyZodiacNote" class="text-[13px] text-gray-600 leading-relaxed"></div>
     </section>
 
-    <section class="bg-white border-thin rounded-sm p-4 mb-4">
+    <section class="bg-white border-thin rounded-sm p-5 mb-5 text-center">
+        <div class="text-[10px] text-gray-400 tracking-wider mb-2">每日一句提醒</div>
+        <div id="dailyReminder" class="text-[14px] text-gray-700 font-serif leading-loose">—</div>
+    </section>
+
+    <section class="bg-white border-thin rounded-sm p-5 mb-5 text-center">
+        <div class="text-[10px] text-gray-400 tracking-wider mb-2">今日開運行動</div>
+        <div id="luckyAction" class="text-[14px] text-gray-700 leading-loose">—</div>
+    </section>
+
+    <section class="bg-white border-thin rounded-sm p-5 mb-5">
         <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3">今日穿衣吉色</div>
-        <div id="colorAdvice" class="text-[11px] text-gray-600 leading-relaxed">載入中…</div>
+        <div id="colorAdvice" class="text-[13px] text-gray-600 leading-relaxed">載入中…</div>
     </section>
 
-    <section class="bg-white border-thin rounded-sm p-4 mb-4">
+    <section class="bg-white border-thin rounded-sm p-5 mb-5">
         <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3 flex justify-between items-center">
             <span>八字排盤</span>
             <span class="text-[10px] font-sans text-gray-400 font-normal">輸入出生資料</span>
@@ -182,7 +201,7 @@
                 </select>
             </div>
         </div>
-        <button onclick="calcBaZi()" class="btn-calc w-full py-2 text-xs tracking-widest font-serif mt-1">排 盤</button>
+        <button onclick="calcBaZi()" class="btn-calc w-full py-3 text-sm tracking-widest font-serif mt-1">排 盤</button>
 
         <button id="saveChartBtn" onclick="openSaveModal()" class="w-full border-thin py-2 text-xs font-serif mt-2 hidden" style="background:#FBF6E9;border-color:#C9A24A;color:#8a6d1f;">💾 儲存命盤</button>
         <a href="https://youshine168.github.io/bazipaipanclient/" target="_blank" rel="noopener" class="w-full border-thin py-2 text-xs font-serif mt-2 block text-center" style="color:#6E7658;">前往完整排盤系統 →</a>
@@ -197,10 +216,19 @@
         <div id="baziResult" class="mt-4 hidden">
             <div id="chartNameLabel" class="text-center text-[11px] text-[#A65B54] font-serif mb-2 hidden"></div>
             <div id="pillarsGrid"></div>
+            <!-- 命盤總結（圖一，自命盤解析客戶版移植）-->
+            <div id="natalSummary" class="mt-4 hidden" style="background:#FBF9F4;border:1px solid #E7DFCF;border-radius:2px;padding:14px 16px;">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+                    <span style="font-size:15px;">📌</span>
+                    <span class="font-serif" style="font-size:13px;font-weight:700;color:#3a352c;letter-spacing:1px;">命盤總結</span>
+                    <span style="font-size:10px;color:#A79E8C;">先看這裡，快速抓重點</span>
+                </div>
+                <div id="natalSummaryBody" style="font-size:13.5px;color:#5c554a;line-height:2;"></div>
+            </div>
         </div>
     </section>
 
-    <section class="bg-white border-thin rounded-sm p-4 mb-4 hidden" id="fortuneSection">
+    <section class="bg-white border-thin rounded-sm p-5 mb-5 hidden" id="fortuneSection">
         <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3 flex justify-between items-center">
             <span>今日運勢解析</span>
             <span class="text-[10px] font-sans text-gray-400 font-normal" id="fortuneSectionLabel"></span>
@@ -460,6 +488,9 @@ function getWuxingClass(s) {
     if ('戊己'.indexOf(s)>=0) return 'color-earth';
     if ('庚辛'.indexOf(s)>=0) return 'color-metal';
     if ('壬癸'.indexOf(s)>=0) return 'color-water';
+    // 地支依五行上色
+    var bw=BRANCH_WUXING[s];
+    if(bw==='木')return'color-wood';if(bw==='火')return'color-fire';if(bw==='土')return'color-earth';if(bw==='金')return'color-metal';if(bw==='水')return'color-water';
     return '';
 }
 function getWuxingName(s) {
@@ -521,7 +552,7 @@ function renderSingleFortune(dayStem, flowStem, flowBranch) {
                 '<div class="flex items-center gap-1.5 mb-1.5">'+
                     '<span class="text-[10px] font-serif px-1.5 py-0.5 rounded-sm '+mhkTagClass+'">今日'+mhkType+'日</span>'+
                 '</div>'+
-                '<p class="text-[11px] text-gray-600 font-light leading-relaxed">'+mhkText+'</p>'+
+                '<p class="text-[13px] text-gray-600 font-light leading-relaxed">'+mhkText+'</p>'+
             '</div>';
     }
 
@@ -533,15 +564,15 @@ function renderSingleFortune(dayStem, flowStem, flowBranch) {
                 '<div class="font-serif text-xs" style="'+lvlStyle+'">['+res.luckLevel+'] '+res.tenGod+'</div>'+
             '</div>'+
         '</div>'+
-        '<p class="text-[11px] text-gray-600 font-light leading-relaxed mb-3 pb-3" style="border-bottom:0.5px solid #E0DCD3;">'+res.desc+'</p>'+
+        '<p class="text-[13px] text-gray-600 font-light leading-relaxed mb-3 pb-3" style="border-bottom:0.5px solid #E0DCD3;">'+res.desc+'</p>'+
         mhkHTML+
         '<div class="mb-2"><div class="flex items-start gap-2">'+
             '<span class="text-[10px] font-serif shrink-0 mt-0.5 px-1.5 py-0.5 rounded-sm" style="background:#EEF5EE;color:#6B7A6A;">宜</span>'+
-            '<span class="text-[11px] text-gray-600 font-light leading-relaxed">'+res.yi+'</span>'+
+            '<span class="text-[13px] text-gray-600 font-light leading-relaxed">'+res.yi+'</span>'+
         '</div></div>'+
         '<div><div class="flex items-start gap-2">'+
             '<span class="text-[10px] font-serif shrink-0 mt-0.5 px-1.5 py-0.5 rounded-sm" style="background:#F5EDEC;color:#A65B54;">忌</span>'+
-            '<span class="text-[11px] text-gray-600 font-light leading-relaxed">'+res.ji+'</span>'+
+            '<span class="text-[13px] text-gray-600 font-light leading-relaxed">'+res.ji+'</span>'+
         '</div></div>';
     document.getElementById('fortuneSection').classList.remove('hidden');
 }
@@ -627,6 +658,248 @@ function downloadCard() {
 
 var flowStemGlobal='';
 var flowBranchGlobal='';
+// ── 每日幸運生肖：與今日日支「六合＋三合」相合的生肖 ──
+var ZODIAC={子:'鼠',丑:'牛',寅:'虎',卯:'兔',辰:'龍',巳:'蛇',午:'馬',未:'羊',申:'猴',酉:'雞',戌:'狗',亥:'豬'};
+var ZODIAC_EMOJI={子:'🐭',丑:'🐮',寅:'🐯',卯:'🐰',辰:'🐲',巳:'🐍',午:'🐴',未:'🐑',申:'🐵',酉:'🐔',戌:'🐶',亥:'🐷'};
+var LIU_HE_PAIR={子:'丑',丑:'子',寅:'亥',亥:'寅',卯:'戌',戌:'卯',辰:'酉',酉:'辰',巳:'申',申:'巳',午:'未',未:'午'};
+var SAN_HE_GROUP=[['申','子','辰'],['寅','午','戌'],['亥','卯','未'],['巳','酉','丑']];
+function renderLuckyZodiac(flowBranch){
+    if(!flowBranch||!ZODIAC[flowBranch]) return;
+    var lucky=[];
+    if(LIU_HE_PAIR[flowBranch]) lucky.push(LIU_HE_PAIR[flowBranch]);
+    SAN_HE_GROUP.forEach(function(g){if(g.indexOf(flowBranch)>=0)g.forEach(function(b){if(b!==flowBranch)lucky.push(b);});});
+    var seen={};lucky=lucky.filter(function(b){if(seen[b])return false;seen[b]=1;return true;});
+    document.getElementById('luckyZodiac').innerHTML=lucky.map(function(b){
+        return '<div style="text-align:center"><div style="font-size:30px;line-height:1.1">'+ZODIAC_EMOJI[b]+'</div><div class="font-serif mt-1" style="font-size:13px;color:#A65B54;font-weight:700">'+ZODIAC[b]+'</div></div>';
+    }).join('');
+    var names=lucky.map(function(b){return ZODIAC[b];}).join('、');
+    document.getElementById('luckyZodiacNote').innerHTML='屬<strong style="color:#A65B54">'+names+'</strong>的朋友今天做事順手、容易遇貴人，適合把握機會、主動出擊。';
+}
+// ── 每日一句提醒：依日期固定，每天自動換一句 ──
+var DAILY_REMINDERS=[
+    '好運不是等來的，是準備好的人剛好遇上。今天做好手邊的事，機會自然靠近。',
+    '心安就是最好的風水，先把心放平，事情往往就順了。',
+    '今天遇到的人事物，都是來教你的。別急著抗拒，先看看它想說什麼。',
+    '進退有時，快慢有道。該衝的時候別猶豫，該等的時候別硬撐。',
+    '與其煩惱還沒發生的事，不如把當下這一步走穩。',
+    '對人多一分善意，福氣就多一分回流，這是最划算的投資。',
+    '今天不順，不代表你不好，只是節氣還沒轉到你這邊，穩住就好。',
+    '把話說軟一點、把事做實一點，貴人自然願意靠近你。',
+    '運勢像潮水，起落都是常態。低潮時養精蓄銳，高潮時把握機會。',
+    '別把力氣浪費在生氣上，留著去做真正想做的事。',
+    '今天照顧好身體，就是替明天的運勢打底。早點休息不吃虧。',
+    '知足的人最有財氣，因為他懂得留住已經擁有的福。',
+    '一句好話能暖人一整天，今天不妨當那個先開口的人。',
+    '路不用一次看完，走好眼前這一段，風景會自己展開。',
+    '今天適合整理——整理環境、整理心情、整理想法，清爽了運才進得來。',
+    '別小看每天的一點點，日積月累就是命運轉彎的地方。',
+    '真正的貴人，常常先以「麻煩」的樣子出現。別太快下判斷。',
+    '把注意力放在能改變的事上，其他的，交給時間。',
+    '今天允許自己慢一點，慢不是落後，是把根紮穩。',
+    '嘴上留德，心裡留寬，路自然會越走越大。',
+    '錢要流動才有財氣，該花的花、該省的省，別讓它卡住。',
+    '別急著證明什麼，做出來的比說出來的更有份量。',
+    '心裡愈亂，愈要把身邊的東西擺整齊，外定能幫內定。',
+    '今天先照顧好自己，你穩了，身邊的人也跟著安定。',
+    '遇到卡關，先深呼吸三次再決定，衝動很少帶來好結果。',
+    '感恩不是客套，是把好運留下來的方法。今天多說幾次謝謝。',
+    '你怎麼開始這一天，這一天多半就怎麼回應你。笑著出門吧。',
+    '有些門關上，是要你走另一條更適合的路，別在原地敲太久。',
+    '今天適合把一件拖很久的小事做完，卡住的氣一鬆，運就活了。',
+    '別跟不同頻的人硬耗，把能量留給懂你的人。',
+    '財來的時候要接得住，平時的準備就是那雙手。',
+    '今天說話慢半拍，聽多一點，往往就少一場誤會。',
+    '順境時修德，逆境時修心，哪一種日子都不算白過。',
+    '別讓昨天的情緒，佔用今天的好運。翻頁，重新來。',
+    '對家人溫柔一點，家和了，外面的事才撐得住。',
+    '今天做的選擇，是在替半年後的自己鋪路。看遠一點。',
+    '真正厲害的人，是把平凡的日子過得穩穩當當。',
+    '心念一轉，運勢就跟著轉。先把心裡的燈點亮。',
+    '今天別跟自己過不去，做得到的先做，做不到的先放。',
+    '好緣分不用刻意抓，把自己過好，對的人自然被吸引來。',
+    '該休息就休息，硬撐出來的運，往往要用健康去還。',
+    '把「我試試看」掛在嘴邊的人，運氣通常不會太差。'
+];
+function renderDailyReminder(y,m,d){
+    var idx=(y*372+m*31+d)%DAILY_REMINDERS.length;
+    document.getElementById('dailyReminder').innerText='「'+DAILY_REMINDERS[idx]+'」';
+}
+// ── 今日開運行動：依今日流日五行給對應小行動，每天自動換 ──
+var LUCKY_ACTIONS={
+    木:[
+        '🌿 在辦公桌或家裡擺一盆綠色植物，替空間注入生機。',
+        '🌅 早起十分鐘做點伸展，讓一天的氣先動起來。',
+        '🚶 到公園或有樹的地方走走，接接木的生發之氣。',
+        '🍵 泡一杯花草茶或綠茶，用清香替心情換個檔。',
+        '👕 穿一件綠色系的單品出門，替今天補點木氣。',
+        '📖 讀幾頁書或學一個新東西，木主成長，動腦最對味。',
+        '🪴 替植物澆水、修剪枯葉，照顧生命也是在養自己的運。',
+        '🧭 往住家或公司的「東方」走走或辦事，順一順方位氣場。',
+        '✍️ 寫下一個這季想完成的小目標，替新的生發開個頭。'
+    ],
+    火:[
+        '☀️ 出門曬點太陽，補足今天的陽氣與行動力。',
+        '📞 主動聯絡一位久沒聯繫的朋友，熱情能招來好緣。',
+        '🏃 做點會流汗的運動，把停滯的能量帶動開來。',
+        '👗 穿一點紅色或橘色，替氣色與自信加溫。',
+        '🕯️ 點一盞香氛燈或蠟燭，讓空間亮起來、心也亮起來。',
+        '🙌 今天主動舉手表現一次，火要有舞台才旺得起來。',
+        '🍳 吃頓熱食、喝碗熱湯，由內把陽氣顧好。',
+        '🧭 往住家或公司的「南方」走走或辦事，順一順方位氣場。',
+        '💬 讚美一個人，把你的熱度分出去，好運會加倍回來。'
+    ],
+    土:[
+        '🧹 花十分鐘整理一個小角落，環境清了運才進得來。',
+        '📒 記一筆帳或列一張待辦，踏實會替你守住財氣。',
+        '🙏 睡前想三件今天值得感恩的事，穩住心也穩住福。',
+        '🤝 履行一個先前答應別人的小承諾，信用就是土的財庫。',
+        '🍠 吃點根莖類或黃色食物，替脾胃與土氣補一補。',
+        '🏠 把家裡中央或客廳收拾乾淨，中宮穩，全家運都穩。',
+        '💛 穿戴一點黃色、大地色，替今天接地氣。',
+        '🧭 待在中央、少奔波，今天適合守成、把手邊的事做扎實。',
+        '💰 把零錢或發票整理好，理財從不嫌小地方開始。'
+    ],
+    金:[
+        '✨ 挑一樣不再需要的東西送走，斷捨離才有空間納新。',
+        '🎵 聽一首喜歡的音樂，用聲音替心情調頻。',
+        '⌚ 戴上金屬或白色系的小飾品，替今天加點金氣。',
+        '🪙 檢視一下收入與開銷，金主財，理清楚才留得住。',
+        '🧼 把常用的物品擦亮、清潔一次，金喜歡乾淨俐落。',
+        '📑 把桌面或手機檔案分類歸位，條理分明就是金的能量。',
+        '🤍 穿白色或銀灰色，替氣場加一層清爽的保護。',
+        '🧭 往住家或公司的「西方」走走或辦事，順一順方位氣場。',
+        '🔔 把一件懸而未決的事做個了斷，金主決斷，別再拖。'
+    ],
+    水:[
+        '💧 今天多喝幾杯溫水，水順了氣也順。',
+        '🧘 找五分鐘安靜下來深呼吸，讓心沉澱。',
+        '🛁 晚上好好洗個澡，把一天的濁氣沖掉、重新開機。',
+        '🌊 聽聽流水或海浪的聲音，替緊繃的神經鬆一鬆。',
+        '🐟 吃點清淡、多水分的食物，替身體補足水氣。',
+        '💙 穿藍色或黑色系，替今天添一分沉靜與智慧。',
+        '📝 睡前把心裡的煩惱寫下來，讓情緒像水一樣流出去。',
+        '🧭 往住家或公司的「北方」走走或辦事，順一順方位氣場。',
+        '🤫 今天話少一點、觀察多一點，水靜下來才照得清事情。'
+    ]
+};
+function renderLuckyAction(flowStem,y,m,d){
+    var wx=getWuxingName(flowStem),pool=LUCKY_ACTIONS[wx];
+    if(!pool)return;
+    document.getElementById('luckyAction').innerText=pool[(y*372+m*31+d)%pool.length];
+}
+// ── 個人化問候：回訪且有存過名字時，首屏直接叫出名字 ──
+function renderGreeting(){
+    var name='';
+    var list=getHistory();
+    if(list.length) name=list[0].name||'';
+    if(!name){ try{var o=JSON.parse(localStorage.getItem('guangyao_bazi'));if(o)name=o.name||'';}catch(e){} }
+    if(!name) return; // 沒名字就維持原本通用標題
+    var h=new Date().getHours();
+    var hi=h<11?'早安':h<17?'午安':'晚安';
+    var emo=h<11?'🌅':h<17?'☀️':'🌙';
+    document.getElementById('greetingText').innerText=hi+'，'+name+' '+emo;
+    document.getElementById('greetingSub').innerText='今天的運勢已經為你準備好了，往下看看 👇';
+    document.getElementById('greetingBanner').classList.remove('hidden');
+}
+// ── 命卦資料（自命盤解析客戶版移植）──
+var GUAS={
+    1:{name:'坎',group:'東四命',desc:'聰明機智，善理財，個性獨特，外柔內剛。'},
+    2:{name:'坤',group:'西四命',desc:'穩重踏實，有耐心，善於助人，重家庭。'},
+    3:{name:'震',group:'東四命',desc:'行動力強，開創性高，積極進取，不服輸。'},
+    4:{name:'巽',group:'東四命',desc:'溫和靈活，善溝通，思維敏銳，重緣分。'},
+    6:{name:'乾',group:'西四命',desc:'領導力強，正直果斷，重名譽，有魄力。'},
+    7:{name:'兌',group:'西四命',desc:'口才佳，有魅力，善交際，重享受。'},
+    8:{name:'艮',group:'西四命',desc:'沉穩踏實，意志堅定，有耐心，重積累。'},
+    9:{name:'離',group:'東四命',desc:'熱情外向，才華出眾，重禮儀，名聲好。'}
+};
+function calcMingGua(birthYear,gender){
+    var nc=birthYear-1911;
+    var s=nc.toString().split('').reduce(function(a,b){return a+parseInt(b);},0);
+    while(s>=10){s=s.toString().split('').reduce(function(a,b){return a+parseInt(b);},0);}
+    if(s===0)s=9;
+    var v;
+    if(gender==='男'){v=8-s;if(v<=0)v+=9;if(v===5)v=2;}
+    else{v=7+s;if(v>9)v-=9;if(v===5)v=8;}
+    return v;
+}
+// ── 犯太歲判斷 + 身強身弱 + 十神白話（自命盤解析客戶版移植）──
+var SQ_MAP={木:new Set(["寅","卯","辰","亥","子","丑"]),火:new Set(["巳","午","未","寅","卯","辰"]),土:new Set(["巳","午","未"]),金:new Set(["申","酉","戌"]),水:new Set(["亥","子","丑","申","酉","戌"])};
+var TS_CHONG=[["子","午"],["丑","未"],["寅","申"],["卯","酉"],["辰","戌"],["巳","亥"]];
+var TS_HAI=[["子","未"],["丑","午"],["寅","巳"],["卯","辰"],["申","亥"],["酉","戌"]];
+var TS_XING_SAN=[["寅","巳","申"],["丑","戌","未"]];
+var TS_XING_ZI=[["子","卯"]];
+var TS_PO=[["子","酉"],["卯","午"],["巳","申"],["寅","亥"],["辰","丑"],["未","戌"]];
+var TAISUI_DESC={
+    值:{name:"值太歲",desc:"今年是你的本命年，運勢起伏會比較明顯，好的更好、壞的也更要小心，建議行事低調、重大決定多想一想。"},
+    沖:{name:"沖太歲",desc:"今年地支與命盤年柱對沖，變動比較大，工作、感情或健康都容易出現轉折，建議行事謹慎、重大決定緩一緩。"},
+    刑:{name:"刑太歲",desc:"今年地支與命盤年柱相刑，容易招是非口舌、人際摩擦，凡事以和為貴，避免不必要的爭執。"},
+    害:{name:"害太歲",desc:"今年地支與命盤年柱相害，容易溝通不順、聚少離多，多花心思維繫關係，避免小誤會累積。"},
+    破:{name:"破太歲",desc:"今年地支與命盤年柱相破，原本穩定的事物容易生變，財務或計劃上多留一點緩衝與備案。"}
+};
+function checkTaiSui(yearZhi,birthYearZhi){
+    if(yearZhi===birthYearZhi) return TAISUI_DESC.值;
+    for(var i=0;i<TS_CHONG.length;i++){var p=TS_CHONG[i];if((yearZhi===p[0]&&birthYearZhi===p[1])||(yearZhi===p[1]&&birthYearZhi===p[0]))return TAISUI_DESC.沖;}
+    for(var i=0;i<TS_XING_SAN.length;i++){var t=TS_XING_SAN[i];if(t.indexOf(yearZhi)>=0&&t.indexOf(birthYearZhi)>=0&&yearZhi!==birthYearZhi)return TAISUI_DESC.刑;}
+    for(var i=0;i<TS_XING_ZI.length;i++){var p=TS_XING_ZI[i];if((yearZhi===p[0]&&birthYearZhi===p[1])||(yearZhi===p[1]&&birthYearZhi===p[0]))return TAISUI_DESC.刑;}
+    for(var i=0;i<TS_HAI.length;i++){var p=TS_HAI[i];if((yearZhi===p[0]&&birthYearZhi===p[1])||(yearZhi===p[1]&&birthYearZhi===p[0]))return TAISUI_DESC.害;}
+    for(var i=0;i<TS_PO.length;i++){var p=TS_PO[i];if((yearZhi===p[0]&&birthYearZhi===p[1])||(yearZhi===p[1]&&birthYearZhi===p[0]))return TAISUI_DESC.破;}
+    return null;
+}
+var SS_PLAIN={
+    比肩:'重朋友重情義，但容易因為朋友而破財，建議錢借出去要有心理準備拿不回來',
+    劫財:'人緣好但錢財留不住，異性緣也旺，財務上要特別謹慎，不適合跟人合夥做生意',
+    食神:'有才華也很會享受生活，吃穿不缺，性格溫和，做研發創作類的工作很適合',
+    傷官:'腦筋靈活反應快，但說話容易得罪人，適合創意工作，要小心言語上的衝突',
+    正財:'踏實會理財，賺錢機會多，是個顧家負責任的人，但對金錢的恆心稍嫌不足',
+    偏財:'對錢財看得開，賺錢速度快但花得也快，人脈廣闊，適合做生意或投資',
+    正官:'重視名聲地位，做事保守講規矩，容易得到肯定，是個適合走仕途或穩定職場的人',
+    七殺:'個性強勢有領導力，能扛壓力也敢衝，適合當主管或創業者，但壓力承受度需要注意',
+    正印:'重感情有同情心，跟長輩貴人緣份深，適合做需要耐心和學習的工作',
+    偏印:'直覺敏銳想法獨特，常有自己一套見解，適合研究、企劃或需要創新思維的領域'
+};
+// ── 命盤總結（圖一）：依 lastChart 產出白話總結 ──
+function renderNatalSummary(){
+    if(!lastChart) return;
+    var pillars=lastChart.pillars, ri=lastChart.dayStem, riWx=getWuxingName(ri);
+    var monthZhi=pillars[1][1];
+    var sq=(SQ_MAP[riWx]&&SQ_MAP[riWx].has(monthZhi))?'身強':'身弱';
+    var wxC=countWuxing(pillars);
+    // 主要十神（年月時天干各 1，各柱藏干各 0.5，排除日主）
+    var ssCount={};
+    [0,1,3].forEach(function(i){var ss=getTenGod(ri,pillars[i][0]);if(ss)ssCount[ss]=(ssCount[ss]||0)+1;});
+    [0,1,2,3].forEach(function(i){(BRANCH_HIDE[pillars[i][1]]||[]).forEach(function(hs){var ss=getTenGod(ri,hs);if(ss)ssCount[ss]=(ssCount[ss]||0)+0.5;});});
+    var sortedSS=Object.entries(ssCount).sort(function(a,b){return b[1]-a[1];});
+    var mainSS=sortedSS.length?sortedSS[0][0]:null;
+    // 凶象組合
+    var gods=[0,1,2,3].map(function(i){return getTenGod(ri,pillars[i][0]);});
+    var xiong=[];
+    if(gods.indexOf('傷官')>=0&&gods.indexOf('正官')>=0) xiong.push('傷官見官');
+    if(gods.indexOf('食神')>=0&&gods.indexOf('偏印')>=0) xiong.push('梟印奪食');
+    // 命卦
+    var mgNum=calcMingGua(lastChart.y, lastChart.gender);
+    var mgInfo=GUAS[mgNum]||{};
+
+    var sqPlain=sq==='身強'
+        ?'天生能量比較飽滿，做事有底氣，遇到壓力扛得住，但也要小心太固執、不聽人勸'
+        :'天生能量偏纖細敏感，需要多依靠他人幫助，遇到壓力容易感到吃不消，要懂得適時休息和求助';
+    var wxMax=Object.entries(wxC).sort(function(a,b){return b[1]-a[1];})[0];
+    var wxMin=Object.entries(wxC).filter(function(e){return e[1]===0;}).map(function(e){return e[0];});
+    var B=function(t){return '<strong style="color:#3a352c">'+t+'</strong>';};
+    var rows=[];
+    rows.push('<div>你的日主是'+B(ri+'（'+riWx+'）')+'，'+sqPlain+'。</div>');
+    if(mainSS&&SS_PLAIN[mainSS]) rows.push('<div>命盤中'+B(mainSS)+'的能量最明顯，'+SS_PLAIN[mainSS]+'。</div>');
+    if(wxMin.length>0&&wxMin.length<5) rows.push('<div>五行中比較缺乏'+B(wxMin.join('、'))+'，這部分的特質或運勢可能較弱，可透過顏色、方位或職業選擇來補強。</div>');
+    else if(wxMax[1]>=4) rows.push('<div>五行中'+B(wxMax[0])+'特別旺盛，這個元素的特質會在你身上特別明顯。</div>');
+    var thisYear=new Date().getFullYear();
+    var thisYearZhi=DZ[((thisYear-4)%12+12)%12];
+    var ts=checkTaiSui(thisYearZhi, pillars[0][1]);
+    if(ts) rows.push('<div>今年（'+thisYear+'年）你<strong style="color:#A85438">'+ts.name+'</strong>，'+ts.desc+'</div>');
+    if(xiong.length>0) rows.push('<div>命盤中有<strong style="color:#9A5840">'+xiong.join('、')+'</strong>的組合，代表某些方面需要多留意，但命理只是提醒，不是定局，懂得化解就沒問題。</div>');
+    if(mgInfo.name) rows.push('<div>你的命卦是'+B(mgNum+mgInfo.name)+'（'+mgInfo.group+'），'+(mgInfo.desc||'')+'</div>');
+    document.getElementById('natalSummaryBody').innerHTML=rows.join('');
+    document.getElementById('natalSummary').classList.remove('hidden');
+}
+
 function calcBaZi(skipSave) {
     var y=parseInt(document.getElementById('birthYear').value);
     var m=parseInt(document.getElementById('birthMonth').value);
@@ -644,6 +917,7 @@ function calcBaZi(skipSave) {
         document.getElementById('saveChartBtn').classList.remove('hidden');
         var gender=document.getElementById('birthGender').value;
         lastChart={pillars:pillars, dayStem:dayStem, y:y, m:m, d:d, h:h, name:name, gender:gender};
+        renderNatalSummary();
         renderSingleFortune(dayStem, flowStemGlobal, flowBranchGlobal);
 
         // 儲存本次排盤資料到歷史排盤
@@ -764,6 +1038,7 @@ window.onload=function(){
     var today=new Date();
     var y=today.getFullYear();var m=today.getMonth()+1;var d=today.getDate();
     document.getElementById('currentDateText').innerText='公曆 '+y+'年'+m+'月'+d+'日';
+    renderDailyReminder(y,m,d);
     try{
         var solar=Solar.fromYmdHms(y,m,d,12,0,0);
         var lunar=solar.getLunar();
@@ -775,7 +1050,12 @@ window.onload=function(){
         document.getElementById('flowDayPillar').innerHTML='<span class="'+getWuxingClass(flowStem)+'">'+flowStem+'</span><span class="'+getWuxingClass(flowBranch)+'">'+flowBranch+'</span>';
         document.getElementById('jieQiText').innerText='目前處於「'+lunar.getPrevJieQi(true).getName()+'」節氣管轄範圍';
         renderColorAdvice(flowStem);
+        renderLuckyZodiac(flowBranch);
+        renderLuckyAction(flowStem,y,m,d);
     }catch(e){document.getElementById('lunarDateText').innerText='農曆資料載入失敗，請重新整理。';console.error(e);}
+
+    // 個人化問候（回訪用戶）
+    renderGreeting();
 
     // 讀取歷史命盤清單並顯示標籤
     renderHistoryChips(0);
