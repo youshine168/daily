@@ -170,6 +170,70 @@
         <div id="iosGuideLater" style="margin-top:10px; font-size:12px; color:#9a948a; cursor:pointer;">下次再說</div>
     </div>
 </div>
+<!-- 首次使用引導（兩步驟：安裝桌面→排自己命盤）-->
+<div id="onboardingOverlay" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(14,12,9,.78);padding:20px;align-items:center;justify-content:center;flex-direction:column;">
+    <!-- Step 1：加到主畫面 -->
+    <div id="onboardStep1" style="background:#FBF9F4;border-radius:14px;max-width:340px;width:100%;padding:26px 22px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.3);">
+        <img src="icon-192.png" alt="" style="width:56px;height:56px;border-radius:13px;margin:0 auto 14px;">
+        <div class="font-serif" style="font-size:17px;font-weight:700;color:#3a352c;margin-bottom:6px;">歡迎來到光耀每日運勢</div>
+        <div style="font-size:13px;color:#6b6459;line-height:1.7;margin-bottom:16px;">把運勢加到手機主畫面<br>每天一點就能查看 📲</div>
+        <div style="text-align:left;background:#fff;border:1px solid #E7DFCF;border-radius:10px;padding:14px 16px;font-size:13px;color:#5c554a;line-height:2;">
+            <div><strong style="color:#A65B54">①</strong> 點瀏覽器的「分享」或「選單」</div>
+            <div><strong style="color:#A65B54">②</strong> 選擇「加入主畫面」</div>
+            <div><strong style="color:#A65B54">③</strong> 按「新增」完成！</div>
+        </div>
+        <button onclick="document.getElementById('onboardStep1').style.display='none';document.getElementById('onboardStep2').style.display='block'" class="ripple" style="margin-top:18px;width:100%;background:#A65B54;color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-family:'Noto Serif TC',serif;cursor:pointer;">下一步 →</button>
+        <div onclick="document.getElementById('onboardStep1').style.display='none';document.getElementById('onboardStep2').style.display='block'" style="margin-top:10px;font-size:12px;color:#9a948a;cursor:pointer;">先跳過</div>
+    </div>
+    <!-- Step 2：排自己的命盤 -->
+    <div id="onboardStep2" style="display:none;background:#FBF9F4;border-radius:14px;max-width:340px;width:100%;padding:26px 22px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.3);">
+        <div style="font-size:28px;margin-bottom:8px;">🌟</div>
+        <div class="font-serif" style="font-size:17px;font-weight:700;color:#3a352c;margin-bottom:4px;">先來排你自己的命盤</div>
+        <div style="font-size:12px;color:#8a8478;line-height:1.6;margin-bottom:16px;">輸入出生資料，專屬運勢為你準備好</div>
+        <div style="text-align:left;">
+            <label style="font-size:10px;color:#9a948a;display:block;margin-bottom:4px;">本名 <span style="color:#A65B54">*</span></label>
+            <input id="obName" type="text" placeholder="請輸入本名" maxlength="10" style="width:100%;border:0.5px solid #E0DCD3;border-radius:10px;padding:8px 10px;font-size:13px;background:#FAFAF9;outline:none;box-sizing:border-box;margin-bottom:10px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+                <div>
+                    <label style="font-size:10px;color:#9a948a;display:block;margin-bottom:4px;">出生年</label>
+                    <select id="obYear" style="width:100%;border:0.5px solid #E0DCD3;border-radius:10px;padding:8px 6px;font-size:13px;background:#FAFAF9;outline:none;"></select>
+                </div>
+                <div>
+                    <label style="font-size:10px;color:#9a948a;display:block;margin-bottom:4px;">出生月</label>
+                    <select id="obMonth" style="width:100%;border:0.5px solid #E0DCD3;border-radius:10px;padding:8px 6px;font-size:13px;background:#FAFAF9;outline:none;"></select>
+                </div>
+                <div>
+                    <label style="font-size:10px;color:#9a948a;display:block;margin-bottom:4px;">出生日</label>
+                    <select id="obDay" style="width:100%;border:0.5px solid #E0DCD3;border-radius:10px;padding:8px 6px;font-size:13px;background:#FAFAF9;outline:none;"></select>
+                </div>
+                <div>
+                    <label style="font-size:10px;color:#9a948a;display:block;margin-bottom:4px;">出生時辰</label>
+                    <select id="obHour" style="width:100%;border:0.5px solid #E0DCD3;border-radius:10px;padding:8px 6px;font-size:13px;background:#FAFAF9;outline:none;">
+                        <option value="0">早子時 00–01</option>
+                        <option value="1">丑時 01–03</option>
+                        <option value="3">寅時 03–05</option>
+                        <option value="5">卯時 05–07</option>
+                        <option value="7">辰時 07–09</option>
+                        <option value="9">巳時 09–11</option>
+                        <option value="11">午時 11–13</option>
+                        <option value="13">未時 13–15</option>
+                        <option value="15">申時 15–17</option>
+                        <option value="17">酉時 17–19</option>
+                        <option value="19">戌時 19–21</option>
+                        <option value="21">亥時 21–23</option>
+                        <option value="23">晚子時 23–24</option>
+                    </select>
+                </div>
+            </div>
+            <label style="font-size:10px;color:#9a948a;display:block;margin-bottom:4px;">性別</label>
+            <select id="obGender" style="width:100%;border:0.5px solid #E0DCD3;border-radius:10px;padding:8px 6px;font-size:13px;background:#FAFAF9;outline:none;margin-bottom:14px;">
+                <option value="男">男命</option>
+                <option value="女">女命</option>
+            </select>
+        </div>
+        <button onclick="completeOnboarding()" class="ripple" style="width:100%;background:#A65B54;color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-family:'Noto Serif TC',serif;cursor:pointer;">開始使用 ✨</button>
+    </div>
+</div>
 <div class="w-full max-w-md mx-auto">
 
     <header class="text-center mb-6">
@@ -227,8 +291,8 @@
             <span class="text-[10px] font-sans text-gray-400 font-normal">輸入出生資料</span>
         </div>
         <div class="mb-2">
-            <label class="text-[10px] text-gray-400 block mb-1">姓名 / 稱呼（選填）</label>
-            <input id="birthName" type="text" placeholder="例：小明" maxlength="10"
+            <label class="text-[10px] text-gray-400 block mb-1">本名 <span style="color:#A65B54">*</span></label>
+            <input id="birthName" type="text" placeholder="請輸入本名" maxlength="10" required
                 class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none">
         </div>
         <div class="grid grid-cols-2 gap-2 mb-2">
@@ -290,6 +354,7 @@
         </div>
         <div id="historyFilters" class="flex flex-wrap gap-1.5 mb-2"></div>
         <div id="historyChips"></div>
+        <button onclick="if(confirm('確定要清除所有資料嗎？清除後需要重新輸入自己的命盤。')){localStorage.removeItem('guangyao_owner');localStorage.removeItem('guangyao_history');localStorage.removeItem('guangyao_bazi');location.reload();}" class="w-full mt-3 pt-3 text-[11px] text-gray-400 cursor-pointer" style="border:none;background:none;border-top:0.5px solid #E0DCD3;">清除所有資料</button>
     </section>
 
     <section class="card-in bg-white border-thin rounded-sm p-5 mb-5 hidden" id="fortuneSection">
@@ -669,6 +734,30 @@ function initSelects() {
     var daySel=document.getElementById('birthDay');
     for(var d=1;d<=31;d++){var opt=document.createElement('option');opt.value=d;opt.textContent=d+'日';daySel.appendChild(opt);}
 }
+function initOnboardSelects() {
+    var ys=document.getElementById('obYear');
+    for(var y=2030;y>=1900;y--){var o=document.createElement('option');o.value=y;o.textContent=y+'年';if(y===1990)o.selected=true;ys.appendChild(o);}
+    var ms=document.getElementById('obMonth');
+    var mn=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+    for(var m=1;m<=12;m++){var o=document.createElement('option');o.value=m;o.textContent=mn[m-1];ms.appendChild(o);}
+    var ds=document.getElementById('obDay');
+    for(var d=1;d<=31;d++){var o=document.createElement('option');o.value=d;o.textContent=d+'日';ds.appendChild(o);}
+}
+function completeOnboarding() {
+    var name=document.getElementById('obName').value.trim();
+    if(!name){alert('請輸入本名');document.getElementById('obName').focus();return;}
+    var owner={name:name,y:parseInt(document.getElementById('obYear').value),m:parseInt(document.getElementById('obMonth').value),d:parseInt(document.getElementById('obDay').value),h:parseInt(document.getElementById('obHour').value),gender:document.getElementById('obGender').value};
+    localStorage.setItem('guangyao_owner',JSON.stringify(owner));
+    document.getElementById('onboardingOverlay').style.display='none';
+    document.getElementById('birthYear').value=owner.y;
+    document.getElementById('birthMonth').value=owner.m;
+    document.getElementById('birthDay').value=owner.d;
+    document.getElementById('birthHour').value=owner.h;
+    document.getElementById('birthName').value=owner.name;
+    document.getElementById('birthGender').value=owner.gender;
+    calcBaZi();
+    renderGreeting();
+}
 // ── 命盤四柱 HTML（圖二樣式，命盤與圖卡共用）──
 function buildPillarChartHTML(pillars, dayStem) {
     var order=[3,2,1,0]; // 顯示順序：時 日 月 年
@@ -893,10 +982,8 @@ function renderClashZodiac(flowBranch){
 // ── 個人化問候：回訪且有存過名字時，首屏直接叫出名字 ──
 function renderGreeting(){
     var name='';
-    var list=getHistory();
-    if(list.length) name=list[0].name||'';
-    if(!name){ try{var o=JSON.parse(localStorage.getItem('guangyao_bazi'));if(o)name=o.name||'';}catch(e){} }
-    if(!name) return; // 沒名字就維持原本通用標題
+    try{var ow=JSON.parse(localStorage.getItem('guangyao_owner'));if(ow)name=ow.name||'';}catch(e){}
+    if(!name) return;
     var h=new Date().getHours();
     var hi=h<11?'早安':h<17?'午安':'晚安';
     var emo=h<11?'🌅':h<17?'☀️':'🌙';
@@ -1009,6 +1096,7 @@ function calcBaZi(skipSave) {
     var d=parseInt(document.getElementById('birthDay').value);
     var h=parseInt(document.getElementById('birthHour').value);
     var name=document.getElementById('birthName').value.trim();
+    if(!name && !skipSave){alert('請輸入本名');document.getElementById('birthName').focus();return;}
     try {
         var pillars=computePillars(y,m,d,h); // 光耀八字排盤引擎
         var dayStem=pillars[2][0];
@@ -1157,6 +1245,10 @@ function buildHistoryChip(item, i, activeIndex) {
 }
 window.onload=function(){
     initSelects();
+    initOnboardSelects();
+    if(!localStorage.getItem('guangyao_owner')){
+        document.getElementById('onboardingOverlay').style.display='flex';
+    }
     var today=new Date();
     var y=today.getFullYear();var m=today.getMonth()+1;var d=today.getDate();
     var DOW=['SUN.','MON.','TUE.','WED.','THU.','FRI.','SAT.'];
