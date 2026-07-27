@@ -31,6 +31,22 @@
         .color-metal { color: #C5B276; }
         .color-water { color: #5B6E80; }
         .border-thin { border: 0.5px solid #E0DCD3; border-radius: 10px; }
+        /* 西元日期：雜誌編排風（直排年份＋大數字月日＋星期）*/
+        .date-line { display:flex; align-items:flex-end; gap:11px; }
+        .date-year { align-self:center; writing-mode:vertical-rl; font-family:'Noto Serif TC',serif; font-size:11px; letter-spacing:2px; color:#a8a297; line-height:1; margin-top:4px; }
+        .date-md { font-family:'Noto Serif TC',serif; font-size:40px; font-weight:400; line-height:.85; letter-spacing:-1px; color:#2E2820; }
+        .date-slash { font-size:27px; color:#b3ada1; margin:0 4px; }
+        .date-meta { align-self:center; display:flex; flex-direction:column; gap:4px; margin-top:4px; }
+        .date-dow { font-family:'Noto Serif TC',serif; font-size:13px; letter-spacing:1px; color:#6b6459; line-height:1; }
+        .date-jieqi { font-family:'Noto Serif TC',serif; font-size:10px; letter-spacing:1px; color:#a8a297; line-height:1; }
+        /* 農曆：小標籤＋襯線內容 */
+        .lunar-line { display:flex; align-items:center; gap:6px; margin-top:7px; }
+        .lunar-tag { display:inline-flex; align-items:center; justify-content:center; font-size:9px; letter-spacing:2px; text-indent:2px; color:#a8a297; border:0.5px solid #E0DCD3; border-radius:3px; padding:3px 6px; line-height:1; flex-shrink:0; }
+        .lunar-val { font-family:'Noto Serif TC',serif; font-size:13px; letter-spacing:1px; color:#5c554a; }
+        /* 干支：橫排方框（印章感）*/
+        .gz-badge { display:inline-flex; align-items:center; justify-content:center; font-family:'Noto Serif TC',serif; font-size:21px; font-weight:700; letter-spacing:3px; text-indent:3px; line-height:1; border:0.5px solid #D8D2C4; border-radius:4px; padding:9px 13px; }
+        /* 生肖方框（與干支同一套樣式）*/
+        .zodiac-badge { display:inline-flex; flex-direction:column; align-items:center; justify-content:center; border:0.5px solid #D8D2C4; border-radius:4px; padding:8px 14px; }
         select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; border-radius: 8px; }
         input[type="text"] { border-radius: 8px; }
         .pillar-card { border: 0.5px solid #E0DCD3; border-radius: 10px; }
@@ -131,16 +147,26 @@
     </div>
 
     <section class="bg-white border-thin rounded-sm p-5 mb-5 text-center">
-        <div class="text-[11px] text-gray-400 tracking-wider mb-1" id="currentDateText">公曆載入中…</div>
-        <div class="text-xs font-medium mb-2" id="lunarDateText">舊曆載入中…</div>
-        <hr class="border-t-[0.5px] border-[#E0DCD3] my-2 w-8 mx-auto">
-        <div class="text-[10px] text-gray-400 mb-0.5">今日流日</div>
-        <div class="text-2xl font-bold font-serif my-1" id="flowDayPillar">--</div>
-        <div class="text-[11px] text-gray-500 font-serif mt-1" id="jieQiText">節氣載入中…</div>
-        <hr class="border-t-[0.5px] border-[#E0DCD3] my-3 w-8 mx-auto">
+        <div class="flex items-center justify-between text-left mb-3">
+            <div>
+                <div class="date-line" id="currentDateText"></div>
+                <div class="lunar-line" id="lunarDateText"></div>
+            </div>
+            <div class="shrink-0 pl-3">
+                <div class="gz-badge" id="flowDayPillar">--</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white border-thin rounded-sm p-5 mb-5 text-center">
         <div class="text-[10px] text-gray-400 mb-2">今日幸運生肖</div>
         <div id="luckyZodiac" class="flex justify-center gap-4 mb-2"></div>
         <div id="luckyZodiacNote" class="text-[13px] text-gray-600 leading-relaxed"></div>
+        <div class="mt-4 pt-4" style="border-top:0.5px solid #E0DCD3;">
+            <div class="text-[10px] text-gray-400 mb-2">今日沖生肖</div>
+            <div id="clashZodiac" class="mb-2"></div>
+            <div id="clashZodiacNote" class="text-[13px] text-gray-600 leading-relaxed"></div>
+        </div>
     </section>
 
     <section class="bg-white border-thin rounded-sm p-5 mb-5 text-center">
@@ -200,23 +226,14 @@
                 </select>
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-2 mb-2">
-            <div>
-                <label class="text-[10px] text-gray-400 block mb-1">性別</label>
-                <select id="birthGender" class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none pr-6">
-                    <option value="男">男命</option>
-                    <option value="女">女命</option>
-                </select>
-            </div>
-            <div>
-                <label class="text-[10px] text-gray-400 block mb-1">分類（選填）</label>
-                <select id="birthCat" class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none pr-6">
-                    <option value="">未分類</option>
-                    <option>家人</option><option>朋友</option><option>客戶</option><option>自己</option><option>其他</option>
-                </select>
-            </div>
+        <div class="mb-2">
+            <label class="text-[10px] text-gray-400 block mb-1">性別</label>
+            <select id="birthGender" class="w-full border-thin px-2 py-1.5 text-xs bg-[#FAFAF9] focus:outline-none pr-6">
+                <option value="男">男命</option>
+                <option value="女">女命</option>
+            </select>
         </div>
-        <button onclick="calcBaZi()" class="btn-calc w-full py-3 text-sm tracking-widest font-serif mt-1">排 盤</button>
+        <button onclick="calcBaZi()" class="btn-calc w-full py-2 text-xs tracking-widest font-serif mt-1">排 盤</button>
 
         <button id="saveChartBtn" onclick="openSaveModal()" class="w-full border-thin py-2 text-xs font-serif mt-2 hidden" style="background:#FBF6E9;border-color:#C9A24A;color:#8a6d1f;">💾 儲存命盤</button>
         <a href="https://youshine168.github.io/bazipaipanclient/" target="_blank" rel="noopener" class="w-full border-thin py-2 text-xs font-serif mt-2 block text-center" style="color:#6E7658;">前往完整排盤系統 →</a>
@@ -231,15 +248,6 @@
         <div id="baziResult" class="mt-4 hidden">
             <div id="chartNameLabel" class="text-center text-[11px] text-[#A65B54] font-serif mb-2 hidden"></div>
             <div id="pillarsGrid"></div>
-            <!-- 命盤總結（圖一，自命盤解析客戶版移植）-->
-            <div id="natalSummary" class="mt-4 hidden" style="background:#FBF9F4;border:1px solid #E7DFCF;border-radius:2px;padding:14px 16px;">
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
-                    <span style="font-size:15px;">📌</span>
-                    <span class="font-serif" style="font-size:13px;font-weight:700;color:#3a352c;letter-spacing:1px;">命盤總結</span>
-                    <span style="font-size:10px;color:#A79E8C;">先看這裡，快速抓重點</span>
-                </div>
-                <div id="natalSummaryBody" style="font-size:13.5px;color:#5c554a;line-height:2;"></div>
-            </div>
         </div>
     </section>
 
@@ -250,6 +258,16 @@
         </div>
         <div id="fortuneDetail"></div>
     </section>
+
+    <!-- 命盤總結（圖一，自命盤解析客戶版移植）-->
+    <div id="natalSummary" class="mb-5 hidden" style="background:#FBF9F4;border:0.5px solid #E7DFCF;border-radius:10px;padding:18px 20px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+            <span style="font-size:15px;">📌</span>
+            <span class="font-serif" style="font-size:13px;font-weight:700;color:#3a352c;letter-spacing:1px;">命盤總結</span>
+            <span style="font-size:10px;color:#A79E8C;">先看這裡，快速抓重點</span>
+        </div>
+        <div id="natalSummaryBody" style="font-size:13.5px;color:#5c554a;line-height:2;"></div>
+    </div>
 
     <div class="text-center mt-6 mb-2 px-2">
         <p class="text-[10px] text-gray-400 leading-relaxed font-light">
@@ -685,7 +703,7 @@ function renderLuckyZodiac(flowBranch){
     SAN_HE_GROUP.forEach(function(g){if(g.indexOf(flowBranch)>=0)g.forEach(function(b){if(b!==flowBranch)lucky.push(b);});});
     var seen={};lucky=lucky.filter(function(b){if(seen[b])return false;seen[b]=1;return true;});
     document.getElementById('luckyZodiac').innerHTML=lucky.map(function(b){
-        return '<div style="text-align:center"><div style="font-size:30px;line-height:1.1">'+ZODIAC_EMOJI[b]+'</div><div class="font-serif mt-1" style="font-size:13px;color:#A65B54;font-weight:700">'+ZODIAC[b]+'</div></div>';
+        return '<div class="zodiac-badge"><div style="font-size:30px;line-height:1.1">'+ZODIAC_EMOJI[b]+'</div><div class="font-serif mt-1" style="font-size:13px;color:#A65B54;font-weight:700">'+ZODIAC[b]+'</div></div>';
     }).join('');
     var names=lucky.map(function(b){return ZODIAC[b];}).join('、');
     document.getElementById('luckyZodiacNote').innerHTML='屬<strong style="color:#A65B54">'+names+'</strong>的朋友今天做事順手、容易遇貴人，適合把握機會、主動出擊。';
@@ -801,6 +819,25 @@ function renderLuckyAction(flowStem,y,m,d){
     var wx=getWuxingName(flowStem),pool=LUCKY_ACTIONS[wx];
     if(!pool)return;
     document.getElementById('luckyAction').innerText=pool[(y*372+m*31+d)%pool.length];
+}
+// ── 今日沖生肖：與今日日支相沖（六沖）的生肖 ──
+function getClashBranch(branch){
+    for(var i=0;i<TS_CHONG.length;i++){
+        var p=TS_CHONG[i];
+        if(p[0]===branch) return p[1];
+        if(p[1]===branch) return p[0];
+    }
+    return '';
+}
+function renderClashZodiac(flowBranch){
+    var cb=getClashBranch(flowBranch);
+    if(!cb) return;
+    document.getElementById('clashZodiac').innerHTML=
+        '<div class="zodiac-badge">'+
+            '<div style="font-size:30px;line-height:1.1">'+ZODIAC_EMOJI[cb]+'</div>'+
+            '<div class="font-serif mt-1" style="font-size:13px;color:#5B6E80;font-weight:700">'+ZODIAC[cb]+'</div>'+
+        '</div>';
+    document.getElementById('clashZodiacNote').innerHTML='屬<strong style="color:#5B6E80">'+ZODIAC[cb]+'</strong>的朋友今天比較容易遇到變動或小狀況，凡事多留一分餘地，重要決定可以緩一緩，低調行事就能平順度過。';
 }
 // ── 個人化問候：回訪且有存過名字時，首屏直接叫出名字 ──
 function renderGreeting(){
@@ -937,7 +974,8 @@ function calcBaZi(skipSave) {
 
         // 儲存本次排盤資料到歷史排盤
         if (!skipSave) {
-            saveToHistory({y:y, m:m, d:d, h:h, name:name, cat:document.getElementById('birthCat').value, gender:gender});
+            // 分類＝日主天干（排盤後自動帶入，不需手選）
+            saveToHistory({y:y, m:m, d:d, h:h, name:name, cat:dayStem, gender:gender});
             setTimeout(function(){document.getElementById('fortuneSection').scrollIntoView({behavior:'smooth',block:'start'});},100);
         }
         renderHistoryChips();
@@ -989,7 +1027,6 @@ function loadHistory(index) {
     document.getElementById('birthDay').value = entry.d;
     document.getElementById('birthHour').value = entry.h;
     document.getElementById('birthName').value = entry.name || '';
-    document.getElementById('birthCat').value = entry.cat || '';
     document.getElementById('birthGender').value = entry.gender || '男';
     calcBaZi(true);
     renderHistoryChips(index);
@@ -1002,9 +1039,10 @@ function renderHistoryChips(activeIndex) {
     if (!list.length) { section.classList.add('hidden'); return; }
     section.classList.remove('hidden');
 
-    // 分類篩選按鈕（只有兩種以上分類時才顯示）
+    // 分類篩選按鈕＝日主天干（依天干順序排列，只有兩種以上才顯示）
     var cats = [];
     list.forEach(function(it){ var c=it.cat||'未分類'; if(cats.indexOf(c)<0) cats.push(c); });
+    cats.sort(function(a,b){ return TG.indexOf(a)-TG.indexOf(b); });
     var fc = document.getElementById('historyFilters');
     fc.innerHTML = '';
     if (cats.length > 1) {
@@ -1012,7 +1050,7 @@ function renderHistoryChips(activeIndex) {
             var key = (c==='全部') ? '' : c;
             var b = document.createElement('span');
             b.className = 'cat-filter' + (historyFilter===key ? ' cat-filter-active' : '');
-            b.textContent = c;
+            b.textContent = (TG.indexOf(c)>=0) ? c+getWuxingName(c) : c;
             b.addEventListener('click', function(){ historyFilter=key; renderHistoryChips(activeIndex); });
             fc.appendChild(b);
         });
@@ -1027,7 +1065,8 @@ function renderHistoryChips(activeIndex) {
         chip.className = 'history-chip pl-3 pr-1.5 py-1.5 text-[11px] font-serif flex items-center gap-2' + (i===activeIndex ? ' history-chip-active' : '');
 
         var nameSpan = document.createElement('span');
-        nameSpan.innerHTML = label + (item.cat ? ' <span class="chip-cat">'+item.cat+'</span>' : '');
+        var catLabel = item.cat ? ((TG.indexOf(item.cat)>=0) ? item.cat+getWuxingName(item.cat) : item.cat) : '';
+        nameSpan.innerHTML = label + (catLabel ? ' <span class="chip-cat">'+catLabel+'</span>' : '');
         nameSpan.style.cursor = 'pointer';
         nameSpan.addEventListener('click', function(){ loadHistory(i); });
 
@@ -1052,7 +1091,15 @@ window.onload=function(){
     initSelects();
     var today=new Date();
     var y=today.getFullYear();var m=today.getMonth()+1;var d=today.getDate();
-    document.getElementById('currentDateText').innerText='公曆 '+y+'年'+m+'月'+d+'日';
+    var DOW=['SUN.','MON.','TUE.','WED.','THU.','FRI.','SAT.'];
+    var p2=function(n){return n<10?'0'+n:''+n;};
+    document.getElementById('currentDateText').innerHTML=
+        '<span class="date-year">'+y+'</span>'+
+        '<span class="date-md">'+p2(m)+'<span class="date-slash">/</span>'+p2(d)+'</span>'+
+        '<span class="date-meta">'+
+            '<span class="date-dow">'+DOW[today.getDay()]+'</span>'+
+            '<span class="date-jieqi" id="jieQiText"></span>'+
+        '</span>';
     renderDailyReminder(y,m,d);
     try{
         var solar=Solar.fromYmdHms(y,m,d,12,0,0);
@@ -1061,11 +1108,14 @@ window.onload=function(){
         var flowStem=flowDay[0];var flowBranch=flowDay[1];
         flowStemGlobal=flowStem;
         flowBranchGlobal=flowBranch;
-        document.getElementById('lunarDateText').innerText='舊曆 '+lunar.getYearInGanZhi()+'年 '+lunar.getMonthInChinese()+'月'+lunar.getDayInChinese();
+        document.getElementById('lunarDateText').innerHTML=
+            '<span class="lunar-tag">農曆</span>'+
+            '<span class="lunar-val">'+lunar.getYearInGanZhi()+'年・'+lunar.getMonthInChinese()+'月'+lunar.getDayInChinese()+'</span>';
         document.getElementById('flowDayPillar').innerHTML='<span class="'+getWuxingClass(flowStem)+'">'+flowStem+'</span><span class="'+getWuxingClass(flowBranch)+'">'+flowBranch+'</span>';
-        document.getElementById('jieQiText').innerText='目前處於「'+lunar.getPrevJieQi(true).getName()+'」節氣管轄範圍';
+        document.getElementById('jieQiText').innerText='節氣．'+lunar.getPrevJieQi(true).getName();
         renderColorAdvice(flowStem);
         renderLuckyZodiac(flowBranch);
+        renderClashZodiac(flowBranch);
         renderLuckyAction(flowStem,y,m,d);
     }catch(e){document.getElementById('lunarDateText').innerText='農曆資料載入失敗，請重新整理。';console.error(e);}
 
@@ -1085,7 +1135,6 @@ window.onload=function(){
             document.getElementById('birthDay').value = entry.d;
             document.getElementById('birthHour').value = entry.h;
             document.getElementById('birthName').value = entry.name || '';
-            document.getElementById('birthCat').value = entry.cat || '';
             document.getElementById('birthGender').value = entry.gender || '男';
             calcBaZi(true);
         } else {
