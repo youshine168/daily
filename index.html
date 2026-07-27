@@ -45,6 +45,37 @@
         .lunar-val { font-family:'Noto Serif TC',serif; font-size:13px; letter-spacing:1px; color:#5c554a; }
         /* 干支：橫排方框（印章感）*/
         .gz-badge { display:inline-flex; align-items:center; justify-content:center; font-family:'Noto Serif TC',serif; font-size:21px; font-weight:700; letter-spacing:3px; text-indent:3px; line-height:1; border:0.5px solid #D8D2C4; border-radius:4px; padding:9px 13px; }
+        /* 卡片捲動浮現：進入視窗才淡入，錯峰由 JS 控制 */
+        .card-in { opacity:0; transform:translateY(16px); transition:opacity .6s cubic-bezier(.22,.68,.36,1), transform .6s cubic-bezier(.22,.68,.36,1); }
+        .card-in.in-view { opacity:1; transform:none; }
+        /* 回頂端按鈕 */
+        #backToTop {
+            position:fixed; right:16px; bottom:20px; z-index:9998;
+            width:42px; height:42px; border-radius:50%; border:0.5px solid #E0DCD3;
+            background:rgba(255,255,255,.94); color:#8a8478; cursor:pointer;
+            display:flex; align-items:center; justify-content:center;
+            box-shadow:0 2px 10px rgba(0,0,0,.10); backdrop-filter:blur(6px);
+            opacity:0; visibility:hidden; transform:translateY(8px);
+            transition:opacity .3s, transform .3s, visibility .3s;
+        }
+        #backToTop.show { opacity:1; visibility:visible; transform:none; }
+        #backToTop:active { background:#F2EFEA; }
+        /* 按壓波紋（純 CSS：按下瞬間縮到中心，放開後擴散淡出）*/
+        .ripple { position:relative; overflow:hidden; -webkit-tap-highlight-color:transparent; }
+        .ripple::after {
+            content:''; position:absolute; inset:0; pointer-events:none;
+            background-image:radial-gradient(circle, rgba(0,0,0,.22) 10%, transparent 10.01%);
+            background-repeat:no-repeat; background-position:50%;
+            transform:scale(10); opacity:0; transition:transform .5s, opacity .9s;
+        }
+        .ripple:active::after { transform:scale(0); opacity:.5; transition:0s; }
+        .ripple-w::after { background-image:radial-gradient(circle, rgba(255,255,255,.55) 10%, transparent 10.01%); }
+        @media (prefers-reduced-motion: reduce) {
+            .card-in { opacity:1; transform:none; transition:none; }
+            .ripple::after { display:none; }
+        }
+        /* 干支小方框（標題列用）*/
+        .gz-badge-sm { display:inline-flex; align-items:center; justify-content:center; font-family:'Noto Serif TC',serif; font-size:11px; font-weight:700; letter-spacing:1px; text-indent:1px; line-height:1; border:0.5px solid #D8D2C4; border-radius:3px; padding:3px 7px; }
         /* 生肖方框（與干支同一套樣式）*/
         .zodiac-badge { display:inline-flex; flex-direction:column; align-items:center; justify-content:center; border:0.5px solid #D8D2C4; border-radius:4px; padding:8px 14px; }
         select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; border-radius: 8px; }
@@ -78,6 +109,12 @@
         .cat-filter { font-size:10px; border:0.5px solid #E0DCD3; border-radius:999px; padding:3px 10px; cursor:pointer; color:#888; }
         .cat-filter-active { border-color:#C9A24A; background:#FBF6E9; color:#8a6d1f; }
         .chip-cat { font-size:9px; color:#a8a297; border:0.5px solid #E5E0D5; border-radius:4px; padding:0 4px; margin-left:4px; }
+        /* 歷史排盤分組標題 */
+        .hist-group { display:flex; align-items:center; gap:6px; margin:10px 0 6px; }
+        .hist-group:first-child { margin-top:2px; }
+        .hist-group-name { font-family:'Noto Serif TC',serif; font-size:11px; font-weight:700; color:#6b6459; letter-spacing:1px; }
+        .hist-group-count { font-size:9px; color:#a8a297; border:0.5px solid #E5E0D5; border-radius:999px; padding:0 5px; }
+        .hist-group-line { flex:1; height:0.5px; background:#EFEBE2; }
 
         /* ── 儲存命盤圖卡 + 彈窗 ── */
         .save-modal { display:none; position:fixed; inset:0; z-index:10000; background:rgba(20,18,14,0.75); overflow:auto; padding:20px 12px; }
@@ -114,7 +151,7 @@
             <div class="font-serif" style="color:#F4E9C9; font-size:13px; font-weight:700;">加入主畫面</div>
             <div style="color:#B8AF9E; font-size:11px;">像 APP 一樣使用光耀每日運勢</div>
         </div>
-        <button id="installBtn" style="background:#C9A24A; color:#0E0C09; border:none; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer; flex-shrink:0;">安裝</button>
+        <button id="installBtn" class="ripple" style="background:#C9A24A; color:#0E0C09; border:none; border-radius:8px; padding:8px 14px; font-size:12px; font-weight:700; cursor:pointer; flex-shrink:0;">安裝</button>
         <button id="installDismissBtn" aria-label="關閉" style="background:none; border:none; color:#7A7468; font-size:18px; cursor:pointer; padding:0 4px; flex-shrink:0;">&times;</button>
     </div>
 </div>
@@ -129,7 +166,7 @@
             <div><strong style="color:#A65B54">②</strong> 往下滑，選「加入主畫面」</div>
             <div><strong style="color:#A65B54">③</strong> 右上角按「新增」完成！</div>
         </div>
-        <button id="iosGuideClose" style="margin-top:18px; width:100%; background:#A65B54; color:#fff; border:none; border-radius:8px; padding:11px; font-size:14px; font-family:'Noto Serif TC',serif; cursor:pointer;">我知道了</button>
+        <button id="iosGuideClose" class="ripple ripple-w" style="margin-top:18px; width:100%; background:#A65B54; color:#fff; border:none; border-radius:8px; padding:11px; font-size:14px; font-family:'Noto Serif TC',serif; cursor:pointer;">我知道了</button>
         <div id="iosGuideLater" style="margin-top:10px; font-size:12px; color:#9a948a; cursor:pointer;">下次再說</div>
     </div>
 </div>
@@ -146,7 +183,7 @@
         <div class="text-[12px] text-gray-500 mt-1" id="greetingSub"></div>
     </div>
 
-    <section class="bg-white border-thin rounded-sm p-5 mb-5 text-center">
+    <section class="card-in bg-white border-thin rounded-sm p-5 mb-5 text-center">
         <div class="flex items-center justify-between text-left mb-3">
             <div>
                 <div class="date-line" id="currentDateText"></div>
@@ -158,7 +195,7 @@
         </div>
     </section>
 
-    <section class="bg-white border-thin rounded-sm p-5 mb-5 text-center">
+    <section class="card-in bg-white border-thin rounded-sm p-5 mb-5 text-center">
         <div class="text-[10px] text-gray-400 mb-2">今日幸運生肖</div>
         <div id="luckyZodiac" class="flex justify-center gap-4 mb-2"></div>
         <div id="luckyZodiacNote" class="text-[13px] text-gray-600 leading-relaxed"></div>
@@ -169,22 +206,22 @@
         </div>
     </section>
 
-    <section class="bg-white border-thin rounded-sm p-5 mb-5 text-center">
+    <section class="card-in bg-white border-thin rounded-sm p-5 mb-5 text-center">
         <div class="text-[10px] text-gray-400 tracking-wider mb-2">每日一句提醒</div>
         <div id="dailyReminder" class="text-[14px] text-gray-700 font-serif leading-loose">—</div>
     </section>
 
-    <section class="bg-white border-thin rounded-sm p-5 mb-5 text-center">
+    <section class="card-in bg-white border-thin rounded-sm p-5 mb-5 text-center">
         <div class="text-[10px] text-gray-400 tracking-wider mb-2">今日開運行動</div>
         <div id="luckyAction" class="text-[14px] text-gray-700 leading-loose">—</div>
     </section>
 
-    <section class="bg-white border-thin rounded-sm p-5 mb-5">
+    <section class="card-in bg-white border-thin rounded-sm p-5 mb-5">
         <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3">今日穿衣吉色</div>
         <div id="colorAdvice" class="text-[13px] text-gray-600 leading-relaxed">載入中…</div>
     </section>
 
-    <section class="bg-white border-thin rounded-sm p-5 mb-5">
+    <section class="card-in bg-white border-thin rounded-sm p-5 mb-5">
         <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3 flex justify-between items-center">
             <span>八字排盤</span>
             <span class="text-[10px] font-sans text-gray-400 font-normal">輸入出生資料</span>
@@ -233,16 +270,17 @@
                 <option value="女">女命</option>
             </select>
         </div>
-        <button onclick="calcBaZi()" class="btn-calc w-full py-2 text-xs tracking-widest font-serif mt-1">排 盤</button>
-
-        <button id="saveChartBtn" onclick="openSaveModal()" class="w-full border-thin py-2 text-xs font-serif mt-2 hidden" style="background:#FBF6E9;border-color:#C9A24A;color:#8a6d1f;">💾 儲存命盤</button>
-        <a href="https://youshine168.github.io/bazipaipanclient/" target="_blank" rel="noopener" class="w-full border-thin py-2 text-xs font-serif mt-2 block text-center" style="color:#6E7658;">前往完整排盤系統 →</a>
+        <div class="flex gap-2 mt-1">
+            <button onclick="calcBaZi()" class="btn-calc ripple ripple-w flex-1 py-2 text-xs tracking-widest font-serif">排 盤</button>
+            <button id="saveChartBtn" onclick="openSaveModal()" class="ripple flex-1 border-thin py-2 text-xs font-serif hidden" style="background:#FBF6E9;border-color:#C9A24A;color:#8a6d1f;">💾 儲存命盤</button>
+        </div>
+        <a href="https://youshine168.github.io/bazipaipanclient/" target="_blank" rel="noopener" class="ripple w-full border-thin py-2 text-xs font-serif mt-2 block text-center" style="color:#6E7658;">前往完整排盤系統 →</a>
 
         <!-- 歷史排盤 -->
         <div id="historySection" class="mt-3 hidden">
             <div class="text-[10px] text-gray-400 mb-1.5">歷史排盤（點名字切換，可存多筆）</div>
             <div id="historyFilters" class="flex flex-wrap gap-1.5 mb-2"></div>
-            <div id="historyChips" class="flex flex-wrap gap-2"></div>
+            <div id="historyChips"></div>
         </div>
 
         <div id="baziResult" class="mt-4 hidden">
@@ -251,16 +289,17 @@
         </div>
     </section>
 
-    <section class="bg-white border-thin rounded-sm p-5 mb-5 hidden" id="fortuneSection">
-        <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3 flex justify-between items-center">
+    <section class="card-in bg-white border-thin rounded-sm p-5 mb-5 hidden" id="fortuneSection">
+        <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3 flex items-center gap-2">
             <span>今日運勢解析</span>
-            <span class="text-[10px] font-sans text-gray-400 font-normal" id="fortuneSectionLabel"></span>
+            <span id="fortuneFlowDay" class="gz-badge-sm"></span>
+            <span id="fortuneDayType"></span>
         </div>
         <div id="fortuneDetail"></div>
     </section>
 
     <!-- 命盤總結（圖一，自命盤解析客戶版移植）-->
-    <div id="natalSummary" class="mb-5 hidden" style="background:#FBF9F4;border:0.5px solid #E7DFCF;border-radius:10px;padding:18px 20px;">
+    <div id="natalSummary" class="card-in mb-5 hidden" style="background:#FBF9F4;border:0.5px solid #E7DFCF;border-radius:10px;padding:18px 20px;">
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
             <span style="font-size:15px;">📌</span>
             <span class="font-serif" style="font-size:13px;font-weight:700;color:#3a352c;letter-spacing:1px;">命盤總結</span>
@@ -283,8 +322,8 @@
     <div class="save-modal-box">
         <div id="saveCardWrap"></div>
         <div class="save-modal-btns">
-            <button onclick="downloadCard()" class="smb-download">⬇ 下載圖片</button>
-            <button onclick="closeSaveModal()" class="smb-close">關閉</button>
+            <button onclick="downloadCard()" class="smb-download ripple ripple-w">⬇ 下載圖片</button>
+            <button onclick="closeSaveModal()" class="smb-close ripple">關閉</button>
         </div>
     </div>
 </div>
@@ -572,30 +611,39 @@ function renderSingleFortune(dayStem, flowStem, flowBranch) {
     if(res.luckLevel==='大吉') lvlStyle='color:#A65B54;font-weight:bold;';
     if(res.luckLevel==='中吉') lvlStyle='color:#789262;font-weight:bold;';
     if(res.luckLevel==='小凶') lvlStyle='color:#5B6E80;';
-    document.getElementById('fortuneSectionLabel').innerText=dayStem+getWuxingName(dayStem)+'・'+res.tenGod;
+    // 吉凶星等（5 星制：大吉5／中吉4／平3／小凶2）
+    var STAR_MAP={大吉:5,中吉:4,平:3,小凶:2};
+    var starN=STAR_MAP[res.luckLevel]||3;
+    var stars=new Array(starN+1).join('★')+new Array(5-starN+1).join('☆');
 
-    // 馬花庫提醒
+    // 流日干支（標題旁方框）
+    document.getElementById('fortuneFlowDay').innerHTML=
+        '<span class="'+getWuxingClass(flowStem)+'">'+flowStem+'</span>'+
+        '<span class="'+getWuxingClass(flowBranch)+'">'+flowBranch+'</span>'+
+        '<span style="color:#8a8478;font-weight:400">日</span>';
+
+    // 馬花庫：日型標示在標題旁，說明留在內文
     var mhkType = BRANCH_TYPE[flowBranch] || '';
     var mhkHTML = '';
+    var dayTypeEl = document.getElementById('fortuneDayType');
     if (mhkType) {
         var mhkTagClass = BRANCH_TYPE_CLASS[mhkType] || '';
         var mhkText = getRandomMhk(mhkType);
+        dayTypeEl.className = 'text-[10px] font-serif font-normal px-1.5 py-0.5 rounded-sm '+mhkTagClass;
+        dayTypeEl.textContent = mhkType+'日';
         mhkHTML =
             '<div class="mb-3 pb-3" style="border-bottom:0.5px solid #E0DCD3;">'+
-                '<div class="flex items-center gap-1.5 mb-1.5">'+
-                    '<span class="text-[10px] font-serif px-1.5 py-0.5 rounded-sm '+mhkTagClass+'">今日'+mhkType+'日</span>'+
-                '</div>'+
                 '<p class="text-[13px] text-gray-600 font-light leading-relaxed">'+mhkText+'</p>'+
             '</div>';
+    } else {
+        dayTypeEl.className = '';
+        dayTypeEl.textContent = '';
     }
 
     document.getElementById('fortuneDetail').innerHTML=
-        '<div class="flex items-center gap-2 mb-3">'+
-            '<div class="font-serif text-2xl font-bold '+getWuxingClass(dayStem)+'">'+dayStem+'</div>'+
-            '<div>'+
-                '<div class="text-[10px] text-gray-400">'+getWuxingName(dayStem)+'・'+(STEM_DATA[dayStem].yang?'陽':'陰')+'</div>'+
-                '<div class="font-serif text-xs" style="'+lvlStyle+'">['+res.luckLevel+'] '+res.tenGod+'</div>'+
-            '</div>'+
+        '<div class="flex items-center gap-3 mb-3">'+
+            '<div class="font-serif text-2xl font-bold '+getWuxingClass(dayStem)+'">'+dayStem+getWuxingName(dayStem)+'</div>'+
+            '<div class="font-serif text-xs" style="'+lvlStyle+'"><span style="letter-spacing:1px">'+stars+'</span> '+res.tenGod+'</div>'+
         '</div>'+
         '<p class="text-[13px] text-gray-600 font-light leading-relaxed mb-3 pb-3" style="border-bottom:0.5px solid #E0DCD3;">'+res.desc+'</p>'+
         mhkHTML+
@@ -976,7 +1024,6 @@ function calcBaZi(skipSave) {
         if (!skipSave) {
             // 分類＝日主天干（排盤後自動帶入，不需手選）
             saveToHistory({y:y, m:m, d:d, h:h, name:name, cat:dayStem, gender:gender});
-            setTimeout(function(){document.getElementById('fortuneSection').scrollIntoView({behavior:'smooth',block:'start'});},100);
         }
         renderHistoryChips();
     } catch(e){alert('排盤失敗，請確認出生日期是否正確。');console.error(e);}
@@ -1056,36 +1103,54 @@ function renderHistoryChips(activeIndex) {
         });
     }
 
+    // 依日主天干分組顯示（命盤多的時候才不會擠成一團）
     container.innerHTML = '';
-    list.forEach(function(item, i) {
-        var cat = item.cat || '未分類';
-        if (historyFilter && cat !== historyFilter) return;
-        var label = item.name ? item.name : (item.y+'年生');
-        var chip = document.createElement('div');
-        chip.className = 'history-chip pl-3 pr-1.5 py-1.5 text-[11px] font-serif flex items-center gap-2' + (i===activeIndex ? ' history-chip-active' : '');
-
-        var nameSpan = document.createElement('span');
-        var catLabel = item.cat ? ((TG.indexOf(item.cat)>=0) ? item.cat+getWuxingName(item.cat) : item.cat) : '';
-        nameSpan.innerHTML = label + (catLabel ? ' <span class="chip-cat">'+catLabel+'</span>' : '');
-        nameSpan.style.cursor = 'pointer';
-        nameSpan.addEventListener('click', function(){ loadHistory(i); });
-
-        var delBtn = document.createElement('span');
-        delBtn.textContent = '×';
-        delBtn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;color:#bbb;font-size:14px;cursor:pointer;';
-        delBtn.addEventListener('click', function(e){
-            e.stopPropagation();
-            if (confirm('確定要刪除「'+label+'」這筆命盤紀錄嗎？')) {
-                removeHistory(i);
-            }
-        });
-        delBtn.addEventListener('mouseenter', function(){ delBtn.style.background='#F0DADA'; delBtn.style.color='#A65B54'; });
-        delBtn.addEventListener('mouseleave', function(){ delBtn.style.background='transparent'; delBtn.style.color='#bbb'; });
-
-        chip.appendChild(nameSpan);
-        chip.appendChild(delBtn);
-        container.appendChild(chip);
+    var groups = {};
+    list.forEach(function(item, i){
+        var c = item.cat || '未分類';
+        if (!groups[c]) groups[c] = [];
+        groups[c].push({item:item, i:i});
     });
+    Object.keys(groups).sort(function(a,b){ return TG.indexOf(a)-TG.indexOf(b); }).forEach(function(k){
+        if (historyFilter && k !== historyFilter) return;
+        var g = groups[k];
+        var title = document.createElement('div');
+        title.className = 'hist-group';
+        title.innerHTML =
+            '<span class="hist-group-name">'+((TG.indexOf(k)>=0) ? k+getWuxingName(k) : k)+'</span>'+
+            '<span class="hist-group-count">'+g.length+'</span>'+
+            '<span class="hist-group-line"></span>';
+        container.appendChild(title);
+        var row = document.createElement('div');
+        row.className = 'flex flex-wrap gap-2';
+        g.forEach(function(e){ row.appendChild(buildHistoryChip(e.item, e.i, activeIndex)); });
+        container.appendChild(row);
+    });
+}
+// 單張歷史命盤標籤（分組標題已標示天干，籤上就不再重複）
+function buildHistoryChip(item, i, activeIndex) {
+    var label = item.name ? item.name : (item.y+'年生');
+    var chip = document.createElement('div');
+    chip.className = 'history-chip pl-3 pr-1.5 py-1.5 text-[11px] font-serif flex items-center gap-2' + (i===activeIndex ? ' history-chip-active' : '');
+
+    var nameSpan = document.createElement('span');
+    nameSpan.textContent = label;
+    nameSpan.style.cursor = 'pointer';
+    nameSpan.addEventListener('click', function(){ loadHistory(i); });
+
+    var delBtn = document.createElement('span');
+    delBtn.textContent = '×';
+    delBtn.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;color:#bbb;font-size:14px;cursor:pointer;';
+    delBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        if (confirm('確定要刪除「'+label+'」這筆命盤紀錄嗎？')) removeHistory(i);
+    });
+    delBtn.addEventListener('mouseenter', function(){ delBtn.style.background='#F0DADA'; delBtn.style.color='#A65B54'; });
+    delBtn.addEventListener('mouseleave', function(){ delBtn.style.background='transparent'; delBtn.style.color='#bbb'; });
+
+    chip.appendChild(nameSpan);
+    chip.appendChild(delBtn);
+    return chip;
 }
 window.onload=function(){
     initSelects();
@@ -1152,6 +1217,10 @@ window.onload=function(){
     } catch(e) { console.warn('無法讀取上次命盤資料', e); }
 };
 </script>
+
+<button id="backToTop" aria-label="回到頂端">
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
 
 <script>
 if ('serviceWorker' in navigator) {
@@ -1232,6 +1301,43 @@ if ('serviceWorker' in navigator) {
     if (banner) banner.style.display = 'none';
     deferredInstallPrompt = null;
   });
+})();
+
+// ── 卡片捲動浮現 ＋ 回頂端按鈕 ──
+(function () {
+  var cards = document.querySelectorAll('.card-in');
+
+  if (!('IntersectionObserver' in window)) {
+    // 舊瀏覽器：直接全部顯示，不做動效
+    for (var i = 0; i < cards.length; i++) cards[i].classList.add('in-view');
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      var n = 0;
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        // 同一批進入視窗的卡片依序浮現
+        setTimeout(function () { el.classList.add('in-view'); }, n * 90);
+        n++;
+        io.unobserve(el);
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    for (var j = 0; j < cards.length; j++) io.observe(cards[j]);
+  }
+
+  // 回頂端
+  var btn = document.getElementById('backToTop');
+  if (btn) {
+    var onScroll = function () {
+      if (window.pageYOffset > 300) btn.classList.add('show');
+      else btn.classList.remove('show');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 })();
 </script>
 
