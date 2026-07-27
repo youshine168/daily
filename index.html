@@ -274,7 +274,7 @@
             <button onclick="calcBaZi()" class="btn-calc ripple ripple-w flex-1 py-2 text-xs tracking-widest font-serif">排 盤</button>
             <button id="saveChartBtn" onclick="openSaveModal()" class="ripple flex-1 border-thin py-2 text-xs font-serif hidden" style="background:#FBF6E9;border-color:#C9A24A;color:#8a6d1f;">💾 儲存命盤</button>
         </div>
-        <a href="https://youshine168.github.io/bazipaipanclient/" target="_blank" rel="noopener" class="ripple w-full border-thin py-2 text-xs font-serif mt-2 block text-center" style="color:#6E7658;">前往完整排盤系統 →</a>
+        <button onclick="document.getElementById('comingSoonModal').style.display='flex'" class="ripple w-full border-thin py-2 text-xs font-serif mt-2 block text-center" style="color:#6E7658;">前往完整排盤系統 →</button>
 
         <div id="baziResult" class="mt-4 hidden">
             <div id="chartNameLabel" class="text-center text-[11px] text-[#A65B54] font-serif mb-2 hidden"></div>
@@ -1221,6 +1221,14 @@ window.onload=function(){
 };
 </script>
 
+<div id="comingSoonModal" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.45);align-items:center;justify-content:center;">
+    <div onclick="event.stopPropagation()" style="background:#fff;border-radius:14px;padding:32px 28px;text-align:center;max-width:280px;font-family:'Noto Serif TC',serif;">
+        <div style="font-size:28px;margin-bottom:12px;">🔧</div>
+        <div style="font-size:16px;font-weight:600;color:#3a3530;margin-bottom:8px;">敬請期待</div>
+        <div style="font-size:13px;color:#8a8478;line-height:1.6;">完整排盤系統正在完善中，<br>完成後將在此開放使用。</div>
+        <button onclick="document.getElementById('comingSoonModal').style.display='none'" class="ripple" style="margin-top:18px;width:100%;background:#A65B54;color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-family:'Noto Serif TC',serif;cursor:pointer;">我知道了</button>
+    </div>
+</div>
 <button id="backToTop" aria-label="回到頂端">
     <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
