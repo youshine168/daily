@@ -259,6 +259,15 @@
         </div>
     </section>
 
+    <section class="card-in bg-white border-thin rounded-sm p-5 mb-5 hidden" id="fortuneSection">
+        <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3 flex items-center gap-2">
+            <span>今日運勢解析</span>
+            <span id="fortuneFlowDay" class="gz-badge-sm"></span>
+            <span id="fortuneDayType"></span>
+        </div>
+        <div id="fortuneDetail"></div>
+    </section>
+
     <section class="card-in bg-white border-thin rounded-sm p-5 mb-5 text-center">
         <div class="text-[10px] text-gray-400 mb-2">今日幸運生肖</div>
         <div id="luckyZodiac" class="flex justify-center gap-4 mb-2"></div>
@@ -355,15 +364,6 @@
         <div id="historyFilters" class="flex flex-wrap gap-1.5 mb-2"></div>
         <div id="historyChips"></div>
         <button onclick="if(confirm('確定要清除所有資料嗎？清除後需要重新輸入自己的命盤。')){localStorage.removeItem('guangyao_owner');localStorage.removeItem('guangyao_history');localStorage.removeItem('guangyao_bazi');location.reload();}" class="w-full mt-3 pt-3 text-[11px] text-gray-400 cursor-pointer" style="border:none;background:none;border-top:0.5px solid #E0DCD3;">清除所有資料</button>
-    </section>
-
-    <section class="card-in bg-white border-thin rounded-sm p-5 mb-5 hidden" id="fortuneSection">
-        <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3 flex items-center gap-2">
-            <span>今日運勢解析</span>
-            <span id="fortuneFlowDay" class="gz-badge-sm"></span>
-            <span id="fortuneDayType"></span>
-        </div>
-        <div id="fortuneDetail"></div>
     </section>
 
     <!-- 命盤總結（圖一，自命盤解析客戶版移植）-->
