@@ -124,9 +124,11 @@
         .sc-head { text-align:center; margin-bottom:12px; }
         .sc-brand { letter-spacing:6px; font-size:11px; color:#b3ab9c; }
         .sc-sub { font-size:10px; color:#b3ab9c; letter-spacing:2px; margin-top:5px; }
-        .sc-title { text-align:center; font-size:20px; font-weight:700; color:#2b2b2b; margin:8px 0 3px; }
-        .sc-gender { text-align:center; font-size:11px; color:#9a948a; }
-        .sc-name { text-align:center; font-size:12px; color:#A65B54; margin-top:2px; }
+        .sc-info-row { display:flex; justify-content:space-between; align-items:center; margin:4px 0 3px; }
+        .sc-info-left { display:flex; align-items:center; gap:7px; }
+        .sc-name-text { font-size:15px; font-weight:700; color:#2b2b2b; }
+        .sc-tag { font-size:10px; color:#8a8478; background:#EAE5D9; border-radius:999px; padding:2px 8px; letter-spacing:1px; }
+        .sc-info-right { font-size:14px; font-weight:700; color:#2b2b2b; text-align:right; }
         .sc-chart { margin:14px 0; }
         .wx-row { display:flex; gap:5px; margin-top:8px; }
         .wx-item { flex:1; border:0.5px solid #E0DCD3; background:#fff; border-radius:6px; padding:8px 0; text-align:center; }
@@ -261,7 +263,7 @@
 
     <section class="card-in bg-white border-thin rounded-sm p-5 mb-5 hidden" id="fortuneSection">
         <div class="font-serif text-xs font-bold tracking-wider pb-2 border-b-[0.5px] border-[#E0DCD3] mb-3 flex items-center gap-2">
-            <span>今日運勢解析</span>
+            <span id="fortuneTitle">今日運勢解析</span>
             <span id="fortuneFlowDay" class="gz-badge-sm"></span>
             <span id="fortuneDayType"></span>
         </div>
@@ -691,6 +693,8 @@ function renderColorAdvice(flowStem) {
         '<div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 0;"><span style="font-size:10px;color:#9CA3AF;margin-right:6px;flex-shrink:0;">避免</span>'+avoidHTML+'</div>';
 }
 function renderSingleFortune(dayStem, flowStem, flowBranch) {
+    var titleName=(lastChart&&lastChart.name)?lastChart.name:'';
+    document.getElementById('fortuneTitle').innerText=titleName?titleName+'的今日運勢':'今日運勢解析';
     var res=calculateFortune(dayStem, flowStem);
     // yi/ji 已包含在 res 中
     var lvlStyle='color:#888;';
@@ -815,7 +819,13 @@ function countWuxing(pillars) {
 // ── 儲存命盤圖卡（圖一樣式，不含命卦）──
 var lastChart=null;
 function buildSaveCardHTML(ctx) {
-    var title=ctx.y+'年'+ctx.m+'月'+ctx.d+'日 · '+ctx.pillars[3][1]+'時';
+    var dateStr=ctx.y+'年'+ctx.m+'月'+ctx.d+'日・'+ctx.pillars[3][1]+'時';
+    var riWx=getWuxingName(ctx.dayStem);
+    var monthZhi=ctx.pillars[1][1];
+    var sq=(SQ_MAP[riWx]&&SQ_MAP[riWx].has(monthZhi))?'身強':'身弱';
+    var leftInfo=(ctx.name?'<span class="sc-name-text">'+ctx.name+'</span>':'')+
+        '<span class="sc-tag">'+(ctx.gender==='女'?'女命':'男命')+'</span>'+
+        '<span class="sc-tag">'+sq+'</span>';
     var wx=countWuxing(ctx.pillars);
     var dots={'木':'#6B7A6A','火':'#A65B54','土':'#B0A18E','金':'#8f9668','水':'#5B6E80'};
     var wxHTML=['木','火','土','金','水'].map(function(k){
@@ -823,9 +833,7 @@ function buildSaveCardHTML(ctx) {
     }).join('');
     return '<div id="saveCard">'+
         '<div class="sc-head"><div class="sc-brand">BAZICHART</div><div class="sc-sub">你的四柱八字 · 主星面板</div></div>'+
-        '<div class="sc-title">'+title+'</div>'+
-        '<div class="sc-gender">'+(ctx.gender==='女'?'女命':'男命')+'</div>'+
-        (ctx.name?'<div class="sc-name">'+ctx.name+'</div>':'')+
+        '<div class="sc-info-row"><div class="sc-info-left">'+leftInfo+'</div><div class="sc-info-right">'+dateStr+'</div></div>'+
         '<div class="sc-chart">'+buildPillarChartHTML(ctx.pillars,ctx.dayStem)+'</div>'+
         '<div class="wx-row">'+wxHTML+'</div>'+
         '<div class="sc-foot">命理僅供參考 · 知命善用</div>'+
